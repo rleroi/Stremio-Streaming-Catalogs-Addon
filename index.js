@@ -15,6 +15,7 @@ setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL | 21600000);
 
 const builder = new addonBuilder({
     id: 'pw.ers.netflix-catalog',
+    logo: 'https://play-lh.googleusercontent.com/TBRwjS_qfJCSj1m7zZB93FnpJM5fSpMA_wUlFDLxWAb45T9RmwBvQd5cWR5viJJOhkI',
     version: '1.0.0',
     name: 'Netflix Catalog',
     description: 'Catalog with the latest movies and series on Netflix, updated every day.',
