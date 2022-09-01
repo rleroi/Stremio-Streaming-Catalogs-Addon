@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { decode } from 'html-entities'
 
 const COUNTRY = 67; // NL
 const MAX = 500;
@@ -19,9 +20,9 @@ export default {
             }).catch(console.error))?.data?.results?.map(item => {
                 return {
                     id: item.imdbid,
-                    name: item.title,
+                    name: decode(item.title),
                     poster: item.img,
-                    description: item.synopsis,
+                    description: decode(item.synopsis),
                     year: item.year,
                     posterShape: 'poster',
                     type: item.vtype,
@@ -32,3 +33,4 @@ export default {
         return metas;
     }
 }
+

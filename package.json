@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "html-entities": "^2.3.3",
     "stremio-addon-sdk": "^1.6.5"
   }
 }
