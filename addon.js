@@ -3,8 +3,8 @@ import { decode } from 'html-entities'
 
 //const COUNTRY = 67; // NL
 const COUNTRY = 78; // US
-const MAX = 500;
-const DAYS = 365;
+const MAX = 300;
+const DAYS = 300;
 
 export default {
     async getMetas(type = 'movie') {
