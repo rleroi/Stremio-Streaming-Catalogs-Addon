@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { decode } from 'html-entities'
 
-const COUNTRY = 67; // NL
+//const COUNTRY = 67; // NL
+const COUNTRY = 78; // US
 const MAX = 500;
 const DAYS = 365;
 
