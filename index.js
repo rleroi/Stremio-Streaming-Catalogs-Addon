@@ -6,7 +6,7 @@ import addon from './addon.js'
 const app = express();
 app.use(cors());
 
-const mixpanel = null;
+let mixpanel = null;
 if(process.env.MIXPANEL_KEY) {
     mixpanel = Mixpanel.init(process.env.MIXPANEL_KEY);
 }
