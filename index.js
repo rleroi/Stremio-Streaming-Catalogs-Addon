@@ -60,11 +60,13 @@ app.get('/manifest.json', function(req, res) {
 })
 
 app.get('/catalog/:type/:id/?:extra?.json', function(req, res) {
-    console.log(req.headers['cf-connecting-ip']);
+    console.log('small ' + req.headers['cf-connecting-ip']);
+    console.log('caps ' + req.headers['CF-Connecting-IP']);
+    console.log('distinct ' + req.headers['CF-Connecting-IP'].replace(/\.|:/g, 'Z'))
 
     mixpanel && mixpanel.track('catalog', {
-        ip: req.headers['cf-connecting-ip'],
-        distinct_id: req.headers['cf-connecting-ip'].replace(/\.|:/g, 'Z'),
+        ip: req.headers['CF-Connecting-IP'],
+        distinct_id: req.headers['CF-Connecting-IP'].replace(/\.|:/g, 'Z'),
         catalog_type: req.params.type,
         catalog_id: req.params.id,
         catalog_extra: req.params?.extra,
