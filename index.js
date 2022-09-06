@@ -4,6 +4,7 @@ import Mixpanel from 'mixpanel';
 import addon from './addon.js'
 
 const app = express();
+app.set('trust proxy', true)
 app.use(cors());
 
 let mixpanel = null;
@@ -32,8 +33,8 @@ setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL | 21600000);
 
 app.get('/manifest.json', function(req, res) {
     mixpanel && mixpanel.track('install', {
-        ip: req.headers['cf-connecting-ip'],
-        distinct_id: req.headers['cf-connecting-ip'].replace(/\.|:/g, 'Z'),
+        ip: req.ip,
+        distinct_id: req.ip.replace(/\.|:/g, 'Z'),
     });
 
     res.send({
@@ -60,13 +61,9 @@ app.get('/manifest.json', function(req, res) {
 })
 
 app.get('/catalog/:type/:id/?:extra?.json', function(req, res) {
-    console.log('small ' + req.headers['cf-connecting-ip']);
-    console.log('caps ' + req.headers['CF-Connecting-IP']);
-    console.log('distinct ' + req.headers['CF-Connecting-IP'].replace(/\.|:/g, 'Z'))
-
     mixpanel && mixpanel.track('catalog', {
-        ip: req.headers['CF-Connecting-IP'],
-        distinct_id: req.headers['CF-Connecting-IP'].replace(/\.|:/g, 'Z'),
+        ip: req.ip,
+        distinct_id: req.ip.replace(/\.|:/g, 'Z'),
         catalog_type: req.params.type,
         catalog_id: req.params.id,
         catalog_extra: req.params?.extra,
