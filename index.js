@@ -32,8 +32,8 @@ setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL | 21600000);
 
 app.get('/manifest.json', function(req, res) {
     mixpanel && mixpanel.track('install', {
-        ip: req.socket.remoteAddress,
-        distinct_id: req.socket.remoteAddress.replace(/\.|:/g, 'Z'),
+        ip: req.headers['cf-connecting-ip'],
+        distinct_id: req.headers['cf-connecting-ip'].replace(/\.|:/g, 'Z'),
     });
 
     res.send({
@@ -60,9 +60,11 @@ app.get('/manifest.json', function(req, res) {
 })
 
 app.get('/catalog/:type/:id/?:extra?.json', function(req, res) {
+    console.log(req.headers['cf-connecting-ip']);
+
     mixpanel && mixpanel.track('catalog', {
-        ip: req.socket.remoteAddress,
-        distinct_id: req.socket.remoteAddress.replace(/\.|:/g, 'Z'),
+        ip: req.headers['cf-connecting-ip'],
+        distinct_id: req.headers['cf-connecting-ip'].replace(/\.|:/g, 'Z'),
         catalog_type: req.params.type,
         catalog_id: req.params.id,
         catalog_extra: req.params?.extra,
