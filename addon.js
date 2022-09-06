@@ -2,7 +2,8 @@ import axios from 'axios';
 import { decode } from 'html-entities'
 
 //const COUNTRY = 67; // NL
-const COUNTRY = 78; // US
+//const COUNTRY = 78; // US
+const COUNTRY = 46; // UK
 const MAX = 300;
 const DAYS = 300;
 

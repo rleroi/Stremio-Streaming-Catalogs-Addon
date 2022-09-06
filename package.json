@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
     "html-entities": "^2.3.3",
-    "stremio-addon-sdk": "^1.6.5"
+    "mixpanel": "^0.17.0"
   }
 }
