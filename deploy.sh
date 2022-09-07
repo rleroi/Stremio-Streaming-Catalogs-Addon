@@ -1,4 +1,5 @@
-#!/usr/bin/bash
+#!/usr/bin/env zsh
+
 set -env
 
 git add --all
