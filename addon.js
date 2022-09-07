@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const AMOUNT = 100;
+const AMOUNT = 250;
 
 export default {
     async getMetas(type = 'MOVIE', providers = ['nfx'], country = "GB", language = 'en') {
