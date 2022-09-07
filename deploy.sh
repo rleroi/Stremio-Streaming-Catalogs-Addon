@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
-set -env
+set -e
 
 git add --all
 git commit -m "Deploy"
