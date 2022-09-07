@@ -1,12 +1,12 @@
 {
   "name": "stremio-netflix-catalog-addon",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "npm run build && node index.js",
     "dev": "nodemon index.js"
   },
   "author": "",
@@ -18,7 +18,6 @@
     "axios": "^0.27.2",
     "cors": "^2.8.5",
     "express": "^4.18.1",
-    "html-entities": "^2.3.3",
     "mixpanel": "^0.17.0"
   }
 }
