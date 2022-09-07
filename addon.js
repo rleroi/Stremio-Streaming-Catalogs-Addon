@@ -29,7 +29,7 @@ export default {
                     posterShape: 'poster',
                     type: item.vtype,
                 }
-            })];
+            }).filter(item => !!item.id)];
         } while((offset += limit) < MAX);
 
         return metas;
