@@ -2,7 +2,7 @@
 
 set -e
 
-git add --all
-git commit -m "Deploy"
 cd vue && nnpm run build && cd ../
+git add --all
+git commit -am "Deploy"
 git push origin master && git push beamup master
