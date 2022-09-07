@@ -44,7 +44,7 @@ export default {
             return [];
         }
 
-        //console.log(res.data.data.popularTitles.edges.length);
+        console.log(providers.join(','), res.data.data.popularTitles.edges.length);
 
         return res.data.data.popularTitles.edges.map(item => {
             return {

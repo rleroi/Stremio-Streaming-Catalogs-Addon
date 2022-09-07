@@ -8,12 +8,10 @@ import addon from './addon.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log(__dirname);
-
 const app = express();
 app.set('trust proxy', true)
 app.use(cors());
-app.use(express.static(path.join(__dirname, '/vue/dist')));
+app.use(express.static(path.join(__dirname, 'vue', 'dist')));
 
 
 let mixpanel = null;
@@ -65,8 +63,8 @@ async function loadNewCatalog() {
 
 
 app.get('/:configuration/manifest.json', (req, res) => {
-    //res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
- 	res.setHeader('content-type', 'application/json');
+    res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
+    res.setHeader('content-type', 'application/json');
 
     let buffer = Buffer(req.params.configuration, 'base64');
 
@@ -196,8 +194,8 @@ app.get('/:configuration/manifest.json', (req, res) => {
 })
 
 app.get('/:configuration?/:resource/:type/:id/:extra?.json', (req, res) => {
-    res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
- 	res.setHeader('content-type', 'application/json');
+    res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
+    res.setHeader('content-type', 'application/json');
 
     mixpanel && mixpanel.track(req.params.resource, {
         ip: req.ip,
@@ -235,8 +233,8 @@ app.get('/:configuration?/:resource/:type/:id/:extra?.json', (req, res) => {
 })
 
 app.get('/manifest.json', function(req, res) {
-    //res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
- 	res.setHeader('content-type', 'application/json');
+    res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
+    res.setHeader('content-type', 'application/json');
 
     mixpanel && mixpanel.track('install', {
         ip: req.ip,
@@ -327,8 +325,8 @@ app.get('/manifest.json', function(req, res) {
 
 
 // app.get('/catalog/:type/:id/:extra?.json', function(req, res) {
-//     res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
-//  	res.setHeader('content-type', 'application/json');
+//      res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
+//      res.setHeader('content-type', 'application/json');
 
 //     let id = req.params.id;
 //     if (id === 'top') {
@@ -359,9 +357,9 @@ app.get('/manifest.json', function(req, res) {
 
 // fallback to Vue
 app.get(/.*/, (req, res) => {
-    //res.setHeader('Cache-Control', 'max-age=60,stale-while-revalidate=60,stale-if-error=60,public');
+    res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
     res.setHeader('content-type', 'text/html');
-    res.sendFile(path.join(__dirname, '/vue/dist/index.html'));
+    res.sendFile(path.join(__dirname, 'vue', 'dist', 'index.html'));
 });
 
 
@@ -369,5 +367,5 @@ loadNewCatalog();
 setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL | 21600000);
 
 app.listen(process.env.PORT || 9000, () => {
-    console.log('http://127.0.0.1:9000/manifest.json');
+    //console.log('http://127.0.0.1:9000/manifest.json');
 });
