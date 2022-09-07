@@ -13,7 +13,7 @@ console.log(__dirname);
 const app = express();
 app.set('trust proxy', true)
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'vue/dist')));
+app.use(express.static(path.join(__dirname, '/vue/dist')));
 
 
 let mixpanel = null;
@@ -297,7 +297,7 @@ app.get('/manifest.json', function(req, res) {
             }, {
                 id: 'pmp',
                 type: 'series',
-                name: 'Paramoun+',
+                name: 'Paramount+',
             }, {
                 id: 'atp',
                 type: 'movie',
@@ -359,9 +359,9 @@ app.get('/manifest.json', function(req, res) {
 
 // fallback to Vue
 app.get(/.*/, (req, res) => {
-    //res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
+    //res.setHeader('Cache-Control', 'max-age=60,stale-while-revalidate=60,stale-if-error=60,public');
     res.setHeader('content-type', 'text/html');
-    res.sendFile(path.join(__dirname, 'vue/dist/index.html'));
+    res.sendFile(path.join(__dirname, '/vue/dist/index.html'));
 });
 
 
