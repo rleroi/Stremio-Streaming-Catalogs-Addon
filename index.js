@@ -211,14 +211,6 @@ app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
         id = 'nfx';
     }
 
-    mixpanel && mixpanel.track('catalog', {
-        ip: req.ip,
-        distinct_id: req.ip.replace(/\.|:/g, 'Z'),
-        catalog_type: req.params.type,
-        catalog_id: req.params.id,
-        catalog_extra: req.params?.extra,
-    });
-
     if (req.params.type === 'movie') {
         res.send({ metas: movies[id] });
 
