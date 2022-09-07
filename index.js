@@ -211,8 +211,6 @@ app.get('/:configuration?/:resource/:type/:id/:extra?.json', (req, res) => {
         id = 'nfx';
     }
 
-    console.log(id);
-
     mixpanel && mixpanel.track('catalog', {
         ip: req.ip,
         distinct_id: req.ip.replace(/\.|:/g, 'Z'),
