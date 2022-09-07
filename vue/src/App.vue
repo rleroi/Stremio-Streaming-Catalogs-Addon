@@ -1,8 +1,8 @@
 <template>
     <div class="antialiased p-4 sm:p-20 bg-purple-900 min-h-screen flex flex-col items-stretch justify-center">
-        <div class="sm:flex sm:flex-row justify-center bg-gray-900 p-5 sm:p-20 rounded-3xl shadow-xl">
+        <div class="sm:flex sm:flex-row justify-center bg-gray-900 p-5 sm:p-20 rounded-3xl shadow-xl grow">
             <div class="flex-col flex self-center lg:p-10 sm:max-w-5xl xl:max-w-lg">
-                <div class="self-start hidden lg:flex flex-col  text-white">
+                <div class="self-start hidden lg:flex flex-col text-white">
                     <h3>
                         <img src="/stremio.png" alt="Stremio">
                     </h3>
