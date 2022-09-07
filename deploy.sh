@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/bash
 set -env
 
 git add --all
