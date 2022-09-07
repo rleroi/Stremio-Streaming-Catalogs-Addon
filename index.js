@@ -8,6 +8,8 @@ import addon from './addon.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+console.log(__dirname);
+
 const app = express();
 app.set('trust proxy', true)
 app.use(cors());
@@ -194,7 +196,7 @@ app.get('/:configuration/manifest.json', (req, res) => {
 })
 
 app.get('/:configuration?/:resource/:type/:id/:extra?.json', (req, res) => {
-    //res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
+    res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
  	res.setHeader('content-type', 'application/json');
 
     mixpanel && mixpanel.track(req.params.resource, {
@@ -357,8 +359,8 @@ app.get('/manifest.json', function(req, res) {
 
 // fallback to Vue
 app.get(/.*/, (req, res) => {
-    res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
- 	res.setHeader('content-type', 'text/html');
+    //res.setHeader('Cache-Control', 'max-age=86400,staleRevalidate=stale-while-revalidate, staleError=stale-if-error, public');
+    res.setHeader('content-type', 'text/html');
     res.sendFile(path.join(__dirname, 'vue/dist/index.html'));
 });
 
