@@ -193,11 +193,11 @@ app.get('/:configuration/manifest.json', (req, res) => {
     });
 })
 
-app.get('/:configuration?/:resource/:type/:id/:extra?.json', (req, res) => {
+app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
     res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
     res.setHeader('content-type', 'application/json');
 
-    mixpanel && mixpanel.track(req.params.resource, {
+    mixpanel && mixpanel.track('catalog', {
         ip: req.ip,
         distinct_id: req.ip.replace(/\.|:/g, 'Z'),
         configuration: req.params?.configuration,
