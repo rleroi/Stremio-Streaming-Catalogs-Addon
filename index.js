@@ -40,9 +40,9 @@ app.get('/manifest.json', function(req, res) {
     res.send({
         id: 'pw.ers.netflix-catalog',
         logo: 'https://play-lh.googleusercontent.com/TBRwjS_qfJCSj1m7zZB93FnpJM5fSpMA_wUlFDLxWAb45T9RmwBvQd5cWR5viJJOhkI',
-        version: '1.0.1',
+        version: '1.0.2',
         name: 'Netflix Catalog',
-        description: 'Catalog with the latest movies and series on Netflix, updated every day.',
+        description: 'Catalog with the latest movies and series on Netflix. Now works on Android TV!',
         catalogs: [
             {
                 id: 'top',
