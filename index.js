@@ -27,7 +27,15 @@ let movies = {
     'pmp': [],
     'hbm': [],
     'hlu': [],
-    'pct': [],
+    'pcp': [],
+    'fmn': [],
+    //'cru': [],
+    'hst': [],
+    'zee': [],
+    'vil': [],
+    'blv': [],
+    'clv': [],
+    'gop': [],
 };
 let series = {
     'nfx': [],
@@ -37,7 +45,15 @@ let series = {
     'pmp': [],
     'hbm': [],
     'hlu': [],
-    'pct': [],
+    'pcp': [],
+    'fmn': [],
+    'cru': [],
+    'hst': [],
+    'zee': [],
+    'vil': [],
+    'blv': [],
+    'clv': [],
+    'gop': [],
 };
 async function loadNewCatalog() {
     console.log('loadNewCatalog');
@@ -48,7 +64,15 @@ async function loadNewCatalog() {
     movies.pmp = await addon.getMetas('MOVIE', ['pmp'], 'US');
     movies.hbm = await addon.getMetas('MOVIE', ['hbm'], 'US');
     movies.hlu = await addon.getMetas('MOVIE', ['hlu'], 'US');
-    movies.pct = await addon.getMetas('MOVIE', ['pct'], 'US');
+    movies.pcp = await addon.getMetas('MOVIE', ['pcp'], 'US');
+    movies.fmn = await addon.getMetas('MOVIE', ['fmn'], 'US');
+    //movies.cru = await addon.getMetas('MOVIE', ['cru'], 'US'); // only 1 result
+    movies.hst = await addon.getMetas('MOVIE', ['hst'], 'IN', 'in');
+    movies.zee = await addon.getMetas('MOVIE', ['zee'], 'IN', 'in');
+    movies.vil = await addon.getMetas('MOVIE', ['vil'], 'NL', 'nl');
+    movies.blv = await addon.getMetas('MOVIE', ['blv'], 'TR', 'tr');
+    movies.clv = await addon.getMetas('MOVIE', ['clv'], 'BR', 'br');
+    movies.gop = await addon.getMetas('MOVIE', ['gop'], 'BR', 'br');
 
     series.nfx = await addon.getMetas('SHOW', ['nfx'], 'GB');
     series.dnp = await addon.getMetas('SHOW', ['dnp'], 'GB');
@@ -57,7 +81,15 @@ async function loadNewCatalog() {
     series.pmp = await addon.getMetas('SHOW', ['pmp'], 'US');
     series.hbm = await addon.getMetas('SHOW', ['hbm'], 'US');
     series.hlu = await addon.getMetas('SHOW', ['hlu'], 'US');
-    series.pct = await addon.getMetas('SHOW', ['pct'], 'US');
+    series.pcp = await addon.getMetas('SHOW', ['pcp'], 'US');
+    series.fmn = await addon.getMetas('SHOW', ['fmn'], 'US');
+    series.cru = await addon.getMetas('SHOW', ['cru'], 'US');
+    series.hst = await addon.getMetas('SHOW', ['hst'], 'IN', 'in');
+    series.zee = await addon.getMetas('SHOW', ['zee'], 'IN', 'in');
+    series.vil = await addon.getMetas('SHOW', ['vil'], 'NL', 'nl');
+    series.blv = await addon.getMetas('SHOW', ['blv'], 'TR', 'tr');
+    series.clv = await addon.getMetas('SHOW', ['clv'], 'BR', 'br');
+    series.gop = await addon.getMetas('SHOW', ['gop'], 'BR', 'br');
     console.log('done');
 }
 
@@ -162,19 +194,109 @@ app.get('/:configuration/manifest.json', (req, res) => {
             name: 'Apple TV+',
         });
     }
-    if (selectedProviders.includes('pct')) {
+    if (selectedProviders.includes('pct') || selectedProviders.includes('pcp')) {
         catalogs.push({
-            id: 'pct',
+            id: 'pcp',
             type: 'movie',
             name: 'Peacock',
         });
         catalogs.push({
-            id: 'pct',
+            id: 'pcp',
             type: 'series',
             name: 'Peacock',
         });
     }
-
+    if (selectedProviders.includes('fmn')) {
+        catalogs.push({
+            id: 'fmn',
+            type: 'movie',
+            name: 'FunimationNow',
+        });
+        catalogs.push({
+            id: 'fmn',
+            type: 'series',
+            name: 'FunimationNow',
+        });
+    }
+    if (selectedProviders.includes('cru')) {
+        catalogs.push({
+            id: 'cru',
+            type: 'series',
+            name: 'Crunchyroll',
+        });
+    }
+    if (selectedProviders.includes('hst')) {
+        catalogs.push({
+            id: 'hst',
+            type: 'movie',
+            name: 'Hotstar',
+        });
+        catalogs.push({
+            id: 'hst',
+            type: 'series',
+            name: 'Hotstar',
+        });
+    }
+    if (selectedProviders.includes('zee')) {
+        catalogs.push({
+            id: 'zee',
+            type: 'movie',
+            name: 'Zee5',
+        });
+        catalogs.push({
+            id: 'zee',
+            type: 'series',
+            name: 'Zee5',
+        });
+    }
+    if (selectedProviders.includes('vil')) {
+        catalogs.push({
+            id: 'vil',
+            type: 'movie',
+            name: 'Videoland',
+        });
+        catalogs.push({
+            id: 'vil',
+            type: 'series',
+            name: 'Videoland',
+        });
+    }
+    if (selectedProviders.includes('blv')) {
+        catalogs.push({
+            id: 'blv',
+            type: 'movie',
+            name: 'BluTV',
+        });
+        catalogs.push({
+            id: 'blv',
+            type: 'series',
+            name: 'BluTV',
+        });
+    }
+    if (selectedProviders.includes('clv')) {
+        catalogs.push({
+            id: 'clv',
+            type: 'movie',
+            name: 'Claro Video',
+        });
+        catalogs.push({
+            id: 'clv',
+            type: 'series',
+            name: 'Claro Video',
+        });
+    }
+    if (selectedProviders.includes('gop')) {
+        catalogs.push({
+            id: 'gop',
+            type: 'movie',
+            name: 'Globoplay',
+        });
+        catalogs.push({
+            id: 'gop',
+            type: 'series',
+            name: 'Globoplay',
+        });
+    }
 
     // show catalogs for providers
     res.send({
@@ -207,8 +329,13 @@ app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
     });
 
     let id = req.params.id;
+    // legacy addon, netflix-only catalog support
     if (id === 'top') {
         id = 'nfx';
+    }
+    // mistakenly added peacock free instead of premium. remove pct when/if everyone is using pcp
+    if (id === 'pct') {
+        id = 'pcp';
     }
 
     if (req.params.type === 'movie') {
@@ -297,11 +424,11 @@ app.get('/manifest.json', function(req, res) {
                 type: 'series',
                 name: 'Apple TV+',
             }, {
-                id: 'pct',
+                id: 'pcp',
                 type: 'movie',
                 name: 'Peacock',
             }, {
-                id: 'pct',
+                id: 'pcp',
                 type: 'series',
                 name: 'Peacock',
             },

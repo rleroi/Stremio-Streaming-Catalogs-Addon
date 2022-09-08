@@ -37,8 +37,24 @@
                                     :class="!isActive('pmp') ? 'inactive' : ''" role="button" />
                                 <img src="/apple.webp" @click="toggle('atp')" class="rounded-xl"
                                     :class="!isActive('atp') ? 'inactive' : ''" role="button" />
-                                <img src="/peacock.webp" @click="toggle('pct')" class="rounded-xl"
-                                    :class="!isActive('pct') ? 'inactive' : ''" role="button" />
+                                <img src="/peacock.webp" @click="toggle('pcp')" class="rounded-xl"
+                                    :class="!isActive('pcp') ? 'inactive' : ''" role="button" />
+                                <img src="/funimation.webp" @click="toggle('fmn')" class="rounded-xl"
+                                    :class="!isActive('fmn') ? 'inactive' : ''" role="button" />
+                                <img src="/crunchyroll.webp" @click="toggle('cru')" class="rounded-xl"
+                                    :class="!isActive('cru') ? 'inactive' : ''" role="button" />
+                                <img src="/hotstar.webp" @click="toggle('hst')" class="rounded-xl"
+                                    :class="!isActive('hst') ? 'inactive' : ''" role="button" />
+                                <img src="/zee5.webp" @click="toggle('zee')" class="rounded-xl"
+                                    :class="!isActive('zee') ? 'inactive' : ''" role="button" />
+                                <img src="/videoland.webp" @click="toggle('vil')" class="rounded-xl"
+                                    :class="!isActive('vil') ? 'inactive' : ''" role="button" />
+                                <img src="/blu.webp" @click="toggle('blv')" class="rounded-xl"
+                                    :class="!isActive('blv') ? 'inactive' : ''" role="button" />
+                                <img src="/claro.webp" @click="toggle('clv')" class="rounded-xl"
+                                    :class="!isActive('clv') ? 'inactive' : ''" role="button" />
+                                <img src="/globo.webp" @click="toggle('gop')" class="rounded-xl"
+                                    :class="!isActive('gop') ? 'inactive' : ''" role="button" />
                             </div>
 
                             <div>
@@ -75,7 +91,7 @@ const state = reactive({
         'pmp',
         'hbm',
         'hlu',
-        'pct',
+        'pcp',
     ],
     addonUrl: '',
 });

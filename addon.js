@@ -47,10 +47,12 @@ export default {
         console.log(providers.join(','), res.data.data.popularTitles.edges.length);
 
         return res.data.data.popularTitles.edges.map(item => {
+            const posterId = item?.node?.content?.posterUrl?.match(/\/poster\/([0-9]+)\//)?.pop();
+
             return {
                 id: item.node.content.externalIds.imdbId,
                 name: item.node.content.title,
-                poster: `https://live.metahub.space/poster/medium/${item.node.content.externalIds.imdbId}/img`, //item.node.content.posterUrl,
+                poster: posterId ? `https://images.justwatch.com/poster/${posterId}/s332/img` : `https://live.metahub.space/poster/medium/${item.node.content.externalIds.imdbId}/img`,
                 posterShape: 'poster',
                 type: type === 'MOVIE' ? 'movie' : 'series',
             }
