@@ -21,15 +21,19 @@
                     <div class="p-12 bg-gray-800 mx-auto rounded-3xl w-96">
 
                         <div class="mb-7">
-                            <h3 class="font-semibold text-2xl text-gray-100">Configure addon <a href="https://discord.gg/XBZFdstZq6"
-                                    target="_blank" class="text-sm text-purple-700 hover:text-purple-600">(?)</a></h3>
+                            <h3 class="font-semibold text-2xl text-gray-100">Configure addon <a
+                                    href="https://discord.gg/XBZFdstZq6" target="_blank"
+                                    class="text-sm text-purple-700 hover:text-purple-600">(?)</a></h3>
                         </div>
                         <div class="text-gray-300">
                             <form class="space-y-6" @submit.prevent="installAddon">
                                 <div>
                                     <p class="text-gray-500 mb-1">Filter providers by country:</p>
-                                    <select v-model="state.country" class="w-full text-gray-200 text-sm px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-purple-400">
-                                        <option v-for="country in getCountries()" :key="country" :value="country">{{ country }}</option>
+                                    <select v-model="state.country"
+                                        class="w-full text-gray-200 text-sm px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-purple-400">
+                                        <option v-for="country in getCountries()" :key="country" :value="country">
+                                            {{ country }}
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="grid grid-cols-4 grid-rows-2 gap-2">
@@ -126,8 +130,8 @@
                         </div>
                     </div>
                     <div class="mt-4 text-center text-gray-400 text-xs">
-                        <a href="https://github.com/rleroi/Stremio-Streaming-Catalogs-Addon" rel="noopener" target="_blank" title="Contribute on GitHub"
-                            class="mr-2 fill-gray-400 hover:fill-gray-500 ">
+                        <a href="https://github.com/rleroi/Stremio-Streaming-Catalogs-Addon" rel="noopener" target="_blank"
+                            title="Contribute on GitHub" class="mr-2 fill-gray-400 hover:fill-gray-500 ">
                             <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24">
                                 <path
@@ -250,7 +254,7 @@ const state = reactive({
 });
 
 function getCountryCodeFromCountry(country) {
-    switch(country) {
+    switch (country) {
         case 'Netherlands':
             return 'nl';
         case 'United States':
@@ -314,5 +318,4 @@ function isActive(provider) {
 <style scoped>
 .inactive {
     @apply opacity-30
-}
-</style>
+}</style>
