@@ -213,7 +213,6 @@ const regions = {
         'sst',
         'mgl',
         'cts',
-        'fmn',
         'nlz'
     ],
     'Any': [
