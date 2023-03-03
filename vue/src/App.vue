@@ -22,46 +22,100 @@
 
                         <div class="mb-7">
                             <h3 class="font-semibold text-2xl text-gray-100">Configure addon</h3>
-                            <p class="text-gray-500">Select your favourite services <a
-                                    href="https://discord.gg/XBZFdstZq6" target="_blank"
-                                    class="text-sm text-purple-700 hover:text-purple-600">(?)</a>
+                            <p class="text-gray-500">Select your favourite services <a href="https://discord.gg/XBZFdstZq6"
+                                    target="_blank" class="text-sm text-purple-700 hover:text-purple-600">(?)</a>
                             </p>
                         </div>
                         <div class="text-gray-300">
                             <form class="space-y-6" @submit.prevent="installAddon">
+                                <select v-model="state.country" class="w-full text-gray-200 text-sm px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-purple-400">
+                                    <option v-for="country in getCountries()" :key="country" :value="country">{{ country }}</option>
+                                </select>
                                 <div class="grid grid-cols-4 grid-rows-2 gap-2">
-                                    <img src="/netflix.webp" @click="toggle('nfx')" class="rounded-xl"
-                                        :class="!isActive('nfx') ? 'inactive' : ''" role="button" />
-                                    <img src="/hbo.webp" @click="toggle('hbm')" class="rounded-xl"
-                                        :class="!isActive('hbm') ? 'inactive' : ''" role="button" />
-                                    <img src="/disney.webp" @click="toggle('dnp')" class="rounded-xl"
-                                        :class="!isActive('dnp') ? 'inactive' : ''" role="button" />
-                                    <img src="/hulu.webp" @click="toggle('hlu')" class="rounded-xl"
-                                        :class="!isActive('hlu') ? 'inactive' : ''" role="button" />
-                                    <img src="/prime.webp" @click="toggle('amp')" class="rounded-xl"
-                                        :class="!isActive('amp') ? 'inactive' : ''" role="button" />
-                                    <img src="/paramount.webp" @click="toggle('pmp')" class="rounded-xl"
-                                        :class="!isActive('pmp') ? 'inactive' : ''" role="button" />
-                                    <img src="/apple.webp" @click="toggle('atp')" class="rounded-xl"
-                                        :class="!isActive('atp') ? 'inactive' : ''" role="button" />
-                                    <img src="/peacock.webp" @click="toggle('pcp')" class="rounded-xl"
-                                        :class="!isActive('pcp') ? 'inactive' : ''" role="button" />
-                                    <img src="/funimation.webp" @click="toggle('fmn')" class="rounded-xl"
-                                        :class="!isActive('fmn') ? 'inactive' : ''" role="button" />
-                                    <img src="/crunchyroll.webp" @click="toggle('cru')" class="rounded-xl"
-                                        :class="!isActive('cru') ? 'inactive' : ''" role="button" />
-                                    <img src="/hotstar.webp" @click="toggle('hst')" class="rounded-xl"
-                                        :class="!isActive('hst') ? 'inactive' : ''" role="button" />
-                                    <img src="/zee5.webp" @click="toggle('zee')" class="rounded-xl"
-                                        :class="!isActive('zee') ? 'inactive' : ''" role="button" />
-                                    <img src="/videoland.webp" @click="toggle('vil')" class="rounded-xl"
-                                        :class="!isActive('vil') ? 'inactive' : ''" role="button" />
-                                    <img src="/blu.webp" @click="toggle('blv')" class="rounded-xl"
-                                        :class="!isActive('blv') ? 'inactive' : ''" role="button" />
-                                    <img src="/claro.webp" @click="toggle('clv')" class="rounded-xl"
-                                        :class="!isActive('clv') ? 'inactive' : ''" role="button" />
-                                    <img src="/globo.webp" @click="toggle('gop')" class="rounded-xl"
-                                        :class="!isActive('gop') ? 'inactive' : ''" role="button" />
+                                    <Popper v-show="showProvider('nfx')" hover content="Netflix">
+                                        <img src="/netflix.webp" @click="toggle('nfx')" class="rounded-xl"
+                                            :class="!isActive('nfx') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('hbm')" hover content="HBO Max">
+                                        <img src="/hbo.webp" @click="toggle('hbm')" class="rounded-xl"
+                                            :class="!isActive('hbm') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('dnp')" hover content="Disney+">
+                                        <img src="/disney.webp" @click="toggle('dnp')" class="rounded-xl"
+                                            :class="!isActive('dnp') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('amp')" hover content="Prime Video">
+                                        <img src="/prime.webp" @click="toggle('amp')" class="rounded-xl"
+                                            :class="!isActive('amp') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('atp')" hover content="Apple TV+">
+                                        <img src="/apple.webp" @click="toggle('atp')" class="rounded-xl"
+                                            :class="!isActive('atp') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('pmp')" hover content="Paramount+">
+                                        <img src="/paramount.webp" @click="toggle('pmp')" class="rounded-xl"
+                                            :class="!isActive('pmp') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('pcp')" hover content="Peacock Premium">
+                                        <img src="/peacock.webp" @click="toggle('pcp')" class="rounded-xl"
+                                            :class="!isActive('pcp') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('hlu')" hover content="Hulu">
+                                        <img src="/hulu.webp" @click="toggle('hlu')" class="rounded-xl"
+                                            :class="!isActive('hlu') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('cts')" hover content="Curiosity Stream">
+                                        <img src="/curiositystream.webp" @click="toggle('cts')" class="rounded-xl"
+                                            :class="!isActive('cts') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('mgl')" hover content="Magellan TV">
+                                        <img src="/magellan.webp" @click="toggle('mgl')" class="rounded-xl"
+                                            :class="!isActive('mgl') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('fmn')" hover content="Funimation Now">
+                                        <img src="/funimation.webp" @click="toggle('fmn')" class="rounded-xl"
+                                            :class="!isActive('fmn') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('cru')" hover content="Crunchyroll">
+                                        <img src="/crunchyroll.webp" @click="toggle('cru')" class="rounded-xl"
+                                            :class="!isActive('cru') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('hst')" hover content="Hotstar">
+                                        <img src="/hotstar.webp" @click="toggle('hst')" class="rounded-xl"
+                                            :class="!isActive('hst') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('zee')" hover content="Zee5">
+                                        <img src="/zee5.webp" @click="toggle('zee')" class="rounded-xl"
+                                            :class="!isActive('zee') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('vil')" hover content="Videoland">
+                                        <img src="/videoland.webp" @click="toggle('vil')" class="rounded-xl"
+                                            :class="!isActive('vil') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('sst')" hover content="SkyShowtime">
+                                        <img src="/skyshowtime.webp" @click="toggle('sst')" class="rounded-xl"
+                                            :class="!isActive('sst') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('hay')" hover content="Hayu">
+                                        <img src="/hayu.webp" @click="toggle('hay')" class="rounded-xl"
+                                            :class="!isActive('hay') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('blv')" hover content="BluTV">
+                                        <img src="/blu.webp" @click="toggle('blv')" class="rounded-xl"
+                                            :class="!isActive('blv') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('clv')" hover content="Clarovideo">
+                                        <img src="/claro.webp" @click="toggle('clv')" class="rounded-xl"
+                                            :class="!isActive('clv') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('gop')" hover content="Globoplay">
+                                        <img src="/globo.webp" @click="toggle('gop')" class="rounded-xl"
+                                            :class="!isActive('gop') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                </div>
+
+                                <div>
+                                    <v-input type="text" placeholder="RPDB key (optional)" v-model="state.rpdbKey" />
                                 </div>
 
                                 <div>
@@ -71,7 +125,7 @@
                         </div>
                     </div>
                     <div class="mt-4 text-center text-gray-400 text-xs">
-                        <a href="https://github.com/rab1t" rel="noopener" target="_blank" title="rab1t's GitHub"
+                        <a href="https://github.com/rleroi" rel="noopener" target="_blank" title="rab1t's GitHub"
                             class="mr-2 fill-gray-400 hover:fill-gray-500 ">
                             <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24">
@@ -93,21 +147,108 @@
 
 <script setup>
 import { reactive } from 'vue';
+import regionsToCountries from './regions-to-countries.json'
 import VButton from "./components/VButton.vue";
+import VInput from "./components/VInput.vue";
+
+const regions = {
+    'United States': [
+        'nfx',
+        'dnp',
+        'amp',
+        'atp',
+        'hbm',
+        'pmp',
+        'fmn',
+        'cts',
+        'hlu',
+        'pcp',
+    ],
+    'Brazil': [
+        'nfx',
+        'dnp',
+        'atp',
+        'amp',
+        'pmp',
+        'hbm',
+        'cts',
+        'fmn',
+        'clv',
+        'gop',
+    ],
+    'India': [
+        'hay',
+        'nfx',
+        'atp',
+        'amp',
+        'zee',
+        'hst',
+    ],
+    'Turkey': [
+        'nfx',
+        'dnp',
+        'atp',
+        'amp',
+        'blv',
+    ],
+    'Netherlands': [
+        'nfx',
+        'dnp',
+        'amp',
+        'atp',
+        'hbm',
+        'hay',
+        'vil',
+        'sst',
+    ],
+    'All': [
+        'nfx',
+        'dnp',
+        'amp',
+        'atp',
+        'hbm',
+        'pmp',
+        'hlu',
+        'pcp',
+        'clv',
+        'gop',
+        'blv',
+        'zee',
+        'hst',
+        'hay',
+        'vil',
+        'sst',
+        'mgl',
+        'cts',
+        'cru',
+        'fmn',
+    ],
+};
 
 const state = reactive({
+    country: getCountry(),
+    rpdbKey: '',
     providers: [
         'nfx',
         'dnp',
         'amp',
         'atp',
-        'pmp',
         'hbm',
-        'hlu',
-        'pcp',
     ],
     addonUrl: '',
 });
+
+function getCountries() {
+    return Object.keys(regions);
+}
+
+function getCountry() {
+    return regionsToCountries[Intl?.DateTimeFormat()?.resolvedOptions()?.timeZone] || 'All';
+}
+
+function showProvider(provider) {
+    return state.providers.includes(provider) || regions?.[state.country]?.includes(provider);
+}
 
 function openUrl(url) {
     window.open(url);
@@ -120,7 +261,7 @@ function installAddon() {
         return;
     }
 
-    const base64 = btoa(`${state.providers.join(',')}:${Number(new Date())}`);
+    const base64 = btoa(`${state.providers.join(',')}:${rpdbKey}:${Number(new Date())}`);
     state.addonUrl = `${import.meta.env.VITE_APP_URL}/${encodeURIComponent(base64)}/manifest.json`;
 
     console.log(state.addonUrl);

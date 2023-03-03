@@ -210,12 +210,12 @@ app.get('/:configuration/manifest.json', (req, res) => {
         catalogs.push({
             id: 'fmn',
             type: 'movie',
-            name: 'FunimationNow',
+            name: 'Funimation',
         });
         catalogs.push({
             id: 'fmn',
             type: 'series',
-            name: 'FunimationNow',
+            name: 'Funimation',
         });
     }
     if (selectedProviders.includes('cru')) {
@@ -277,12 +277,12 @@ app.get('/:configuration/manifest.json', (req, res) => {
         catalogs.push({
             id: 'clv',
             type: 'movie',
-            name: 'Claro Video',
+            name: 'Clarovideo',
         });
         catalogs.push({
             id: 'clv',
             type: 'series',
-            name: 'Claro Video',
+            name: 'Clarovideo',
         });
     }
     if (selectedProviders.includes('gop')) {
@@ -480,7 +480,6 @@ app.get(/.*/, (req, res) => {
     res.setHeader('content-type', 'text/html');
     res.sendFile(path.join(__dirname, 'vue', 'dist', 'index.html'));
 });
-
 
 loadNewCatalog();
 setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL | 21600000);
