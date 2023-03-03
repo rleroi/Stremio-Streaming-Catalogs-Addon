@@ -127,7 +127,7 @@ app.get('/:configuration/manifest.json', (req, res) => {
     res.setHeader('content-type', 'application/json');
 
     // parse config
-    const buffer = Buffer(req.params?.configuration, 'base64');
+    const buffer = Buffer(req.params?.configuration || '', 'base64');
     const [selectedProviders, rpdbKey, countryCode, installedAt] = buffer.toString('ascii')?.split(':');
 
     mixpanel && mixpanel.track('install', {
@@ -406,7 +406,7 @@ app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
     res.setHeader('content-type', 'application/json');
 
     // parse config
-    const buffer = Buffer(req.params?.configuration, 'base64');
+    const buffer = Buffer(req.params?.configuration || '', 'base64');
     const [selectedProviders, rpdbKey, countryCode, installedAt] = buffer.toString('ascii')?.split(':');
 
     mixpanel && mixpanel.track('catalog', {
