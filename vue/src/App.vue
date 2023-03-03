@@ -292,7 +292,7 @@ function installAddon() {
     const base64 = btoa(`${state.providers.join(',')}:${state.rpdbKey}:${getCountryCodeFromCountry(state.country)}:${Number(new Date())}`);
     state.addonUrl = `${import.meta.env.VITE_APP_URL}/${encodeURIComponent(base64)}/manifest.json`;
 
-    console.log(state.addonUrl);
+    console.log('URL:', state.addonUrl);
 
     window.location.href = state.addonUrl.replace(/https?:\/\//, 'stremio://');
 }

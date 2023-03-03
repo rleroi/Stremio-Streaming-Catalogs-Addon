@@ -1,12 +1,26 @@
+import winston from 'winston';
 import express from 'express';
 import cors from 'cors';
 import Mixpanel from 'mixpanel';
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import addon from './addon.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const logger = winston.createLogger({
+    format: winston.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+        new winston.transports.File({ filename: path.join(__dirname, 'vue', 'dist', 'error.log'), level: 'error' }),
+    ]
+});
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple(),
+    }));
+}
 
 const app = express();
 app.set('trust proxy', true)
@@ -15,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'vue', 'dist')));
 
 
 let mixpanel = null;
-if(process.env.MIXPANEL_KEY) {
+if (process.env.MIXPANEL_KEY) {
     mixpanel = Mixpanel.init(process.env.MIXPANEL_KEY);
 }
 
@@ -437,7 +451,7 @@ app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
     }
 })
 
-app.get('/manifest.json', function(req, res) {
+app.get('/manifest.json', function (req, res) {
     res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
     res.setHeader('content-type', 'application/json');
 
