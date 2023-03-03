@@ -524,7 +524,7 @@ try {
     setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL | 21600000);
 
     app.listen(process.env.PORT || 9000, () => {
-        //console.log('http://127.0.0.1:9000/manifest.json');
+        console.log('http://127.0.0.1:9000/manifest.json');
     });
 } catch (e) {
     logger.error(e.message);
