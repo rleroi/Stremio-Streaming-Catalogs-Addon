@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  @apply bg-purple-900;
+}
+
 :root {
   --popper-theme-background-color: rgb(17 24 39);
   --popper-theme-background-color-hover: rgb(17 24 39);
