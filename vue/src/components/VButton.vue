@@ -1,6 +1,6 @@
 <template>
     <button v-if="variation === 'primary'"
-            class="w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3  rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-500">
+            class="w-full flex justify-center bg-purple-900 hover:bg-purple-800 text-gray-100 p-3  rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-500">
         <slot></slot>
     </button>
     <button v-else

@@ -21,16 +21,17 @@
                     <div class="p-12 bg-gray-800 mx-auto rounded-3xl w-96">
 
                         <div class="mb-7">
-                            <h3 class="font-semibold text-2xl text-gray-100">Configure addon</h3>
-                            <p class="text-gray-500">Select your favourite services <a href="https://discord.gg/XBZFdstZq6"
-                                    target="_blank" class="text-sm text-purple-700 hover:text-purple-600">(?)</a>
-                            </p>
+                            <h3 class="font-semibold text-2xl text-gray-100">Configure addon <a href="https://discord.gg/XBZFdstZq6"
+                                    target="_blank" class="text-sm text-purple-700 hover:text-purple-600">(?)</a></h3>
                         </div>
                         <div class="text-gray-300">
                             <form class="space-y-6" @submit.prevent="installAddon">
-                                <select v-model="state.country" class="w-full text-gray-200 text-sm px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-purple-400">
-                                    <option v-for="country in getCountries()" :key="country" :value="country">{{ country }}</option>
-                                </select>
+                                <div>
+                                    <p class="text-gray-500 mb-1">Filter providers by country:</p>
+                                    <select v-model="state.country" class="w-full text-gray-200 text-sm px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-purple-400">
+                                        <option v-for="country in getCountries()" :key="country" :value="country">{{ country }}</option>
+                                    </select>
+                                </div>
                                 <div class="grid grid-cols-4 grid-rows-2 gap-2">
                                     <Popper v-show="showProvider('nfx')" hover content="Netflix">
                                         <img src="/netflix.webp" @click="toggle('nfx')" class="rounded-xl"
@@ -68,7 +69,7 @@
                                         <img src="/curiositystream.webp" @click="toggle('cts')" class="rounded-xl"
                                             :class="!isActive('cts') ? 'inactive' : ''" role="button" />
                                     </Popper>
-                                    <Popper v-show="showProvider('mgl')" hover content="Magellan TV">
+                                    <Popper v-show="showProvider('mgl')" hover content="MagellanTV">
                                         <img src="/magellan.webp" @click="toggle('mgl')" class="rounded-xl"
                                             :class="!isActive('mgl') ? 'inactive' : ''" role="button" />
                                     </Popper>
@@ -76,33 +77,9 @@
                                         <img src="/funimation.webp" @click="toggle('fmn')" class="rounded-xl"
                                             :class="!isActive('fmn') ? 'inactive' : ''" role="button" />
                                     </Popper>
-                                    <Popper v-show="showProvider('cru')" hover content="Crunchyroll">
-                                        <img src="/crunchyroll.webp" @click="toggle('cru')" class="rounded-xl"
-                                            :class="!isActive('cru') ? 'inactive' : ''" role="button" />
-                                    </Popper>
-                                    <Popper v-show="showProvider('hst')" hover content="Hotstar">
-                                        <img src="/hotstar.webp" @click="toggle('hst')" class="rounded-xl"
-                                            :class="!isActive('hst') ? 'inactive' : ''" role="button" />
-                                    </Popper>
-                                    <Popper v-show="showProvider('zee')" hover content="Zee5">
-                                        <img src="/zee5.webp" @click="toggle('zee')" class="rounded-xl"
-                                            :class="!isActive('zee') ? 'inactive' : ''" role="button" />
-                                    </Popper>
-                                    <Popper v-show="showProvider('vil')" hover content="Videoland">
-                                        <img src="/videoland.webp" @click="toggle('vil')" class="rounded-xl"
-                                            :class="!isActive('vil') ? 'inactive' : ''" role="button" />
-                                    </Popper>
-                                    <Popper v-show="showProvider('sst')" hover content="SkyShowtime">
-                                        <img src="/skyshowtime.webp" @click="toggle('sst')" class="rounded-xl"
-                                            :class="!isActive('sst') ? 'inactive' : ''" role="button" />
-                                    </Popper>
                                     <Popper v-show="showProvider('hay')" hover content="Hayu">
                                         <img src="/hayu.webp" @click="toggle('hay')" class="rounded-xl"
                                             :class="!isActive('hay') ? 'inactive' : ''" role="button" />
-                                    </Popper>
-                                    <Popper v-show="showProvider('blv')" hover content="BluTV">
-                                        <img src="/blu.webp" @click="toggle('blv')" class="rounded-xl"
-                                            :class="!isActive('blv') ? 'inactive' : ''" role="button" />
                                     </Popper>
                                     <Popper v-show="showProvider('clv')" hover content="Clarovideo">
                                         <img src="/claro.webp" @click="toggle('clv')" class="rounded-xl"
@@ -112,6 +89,30 @@
                                         <img src="/globo.webp" @click="toggle('gop')" class="rounded-xl"
                                             :class="!isActive('gop') ? 'inactive' : ''" role="button" />
                                     </Popper>
+                                    <Popper v-show="showProvider('hst')" hover content="Hotstar">
+                                        <img src="/hotstar.webp" @click="toggle('hst')" class="rounded-xl"
+                                            :class="!isActive('hst') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('zee')" hover content="Zee5">
+                                        <img src="/zee5.webp" @click="toggle('zee')" class="rounded-xl"
+                                            :class="!isActive('zee') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('nlz')" hover content="NLZIET">
+                                        <img src="/nlziet.webp" @click="toggle('nlz')" class="rounded-xl"
+                                            :class="!isActive('nlz') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('vil')" hover content="Videoland">
+                                        <img src="/videoland.webp" @click="toggle('vil')" class="rounded-xl"
+                                            :class="!isActive('vil') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('sst')" hover content="SkyShowtime">
+                                        <img src="/skyshowtime.webp" @click="toggle('sst')" class="rounded-xl"
+                                            :class="!isActive('sst') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('blv')" hover content="BluTV">
+                                        <img src="/blu.webp" @click="toggle('blv')" class="rounded-xl"
+                                            :class="!isActive('blv') ? 'inactive' : ''" role="button" />
+                                    </Popper>
                                 </div>
 
                                 <div>
@@ -119,13 +120,13 @@
                                 </div>
 
                                 <div>
-                                    <v-button type="submit">Install addon</v-button>
+                                    <v-button type="submit" variation="primary">Install addon</v-button>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="mt-4 text-center text-gray-400 text-xs">
-                        <a href="https://github.com/rleroi" rel="noopener" target="_blank" title="rab1t's GitHub"
+                        <a href="https://github.com/rleroi/Stremio-Streaming-Catalogs-Addon" rel="noopener" target="_blank" title="Contribute on GitHub"
                             class="mr-2 fill-gray-400 hover:fill-gray-500 ">
                             <svg class="inline-block" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24">
@@ -159,8 +160,9 @@ const regions = {
         'atp',
         'hbm',
         'pmp',
-        'fmn',
+        'mgl',
         'cts',
+        'fmn',
         'hlu',
         'pcp',
     ],
@@ -171,10 +173,11 @@ const regions = {
         'amp',
         'pmp',
         'hbm',
-        'cts',
         'fmn',
         'clv',
         'gop',
+        'mgl',
+        'cts',
     ],
     'India': [
         'hay',
@@ -183,6 +186,8 @@ const regions = {
         'amp',
         'zee',
         'hst',
+        'mgl',
+        'cts',
     ],
     'Turkey': [
         'nfx',
@@ -190,6 +195,8 @@ const regions = {
         'atp',
         'amp',
         'blv',
+        'mgl',
+        'cts',
     ],
     'Netherlands': [
         'nfx',
@@ -200,8 +207,12 @@ const regions = {
         'hay',
         'vil',
         'sst',
+        'mgl',
+        'cts',
+        'fmn',
+        'nlz'
     ],
-    'All': [
+    'Any': [
         'nfx',
         'dnp',
         'amp',
@@ -220,8 +231,8 @@ const regions = {
         'sst',
         'mgl',
         'cts',
-        'cru',
         'fmn',
+        'nlz'
     ],
 };
 
@@ -238,12 +249,29 @@ const state = reactive({
     addonUrl: '',
 });
 
+function getCountryCodeFromCountry(country) {
+    switch(country) {
+        case 'Netherlands':
+            return 'nl';
+        case 'United States':
+            return 'us';
+        case 'Turkey':
+            return 'tr';
+        case 'Brazil':
+            return 'br';
+        case 'India':
+            return 'in';
+        default:
+            return '';
+    }
+}
+
 function getCountries() {
     return Object.keys(regions);
 }
 
 function getCountry() {
-    return regionsToCountries[Intl?.DateTimeFormat()?.resolvedOptions()?.timeZone] || 'All';
+    return regionsToCountries[Intl?.DateTimeFormat()?.resolvedOptions()?.timeZone] || 'Any';
 }
 
 function showProvider(provider) {
@@ -261,7 +289,7 @@ function installAddon() {
         return;
     }
 
-    const base64 = btoa(`${state.providers.join(',')}:${rpdbKey}:${Number(new Date())}`);
+    const base64 = btoa(`${state.providers.join(',')}:${state.rpdbKey}:${getCountryCodeFromCountry(state.country)}:${Number(new Date())}`);
     state.addonUrl = `${import.meta.env.VITE_APP_URL}/${encodeURIComponent(base64)}/manifest.json`;
 
     console.log(state.addonUrl);

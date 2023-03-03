@@ -36,6 +36,11 @@ let movies = {
     'blv': [],
     'clv': [],
     'gop': [],
+    'mgl': [],
+    'cts': [],
+    'sst': [],
+    'nlz': [],
+    //'hay': [],
 };
 let series = {
     'nfx': [],
@@ -54,22 +59,32 @@ let series = {
     'blv': [],
     'clv': [],
     'gop': [],
+    'mgl': [],
+    'cts': [],
+    'sst': [],
+    'nlz': [],
+    'hay': [],
 };
 async function loadNewCatalog() {
     console.log('loadNewCatalog');
     movies.nfx = await addon.getMetas('MOVIE', ['nfx'], 'GB');
     movies.dnp = await addon.getMetas('MOVIE', ['dnp'], 'GB');
     movies.atp = await addon.getMetas('MOVIE', ['atp'], 'GB');
+    //movies.hay = await addon.getMetas('MOVIE', ['hay'], 'GB'); // 0 results
     movies.amp = await addon.getMetas('MOVIE', ['amp'], 'US');
     movies.pmp = await addon.getMetas('MOVIE', ['pmp'], 'US');
     movies.hbm = await addon.getMetas('MOVIE', ['hbm'], 'US');
     movies.hlu = await addon.getMetas('MOVIE', ['hlu'], 'US');
     movies.pcp = await addon.getMetas('MOVIE', ['pcp'], 'US');
     movies.fmn = await addon.getMetas('MOVIE', ['fmn'], 'US');
+    movies.cts = await addon.getMetas('MOVIE', ['cts'], 'US');
+    movies.mgl = await addon.getMetas('MOVIE', ['mgl'], 'US');
     //movies.cru = await addon.getMetas('MOVIE', ['cru'], 'US'); // only 1 result
     movies.hst = await addon.getMetas('MOVIE', ['hst'], 'IN', 'in');
     movies.zee = await addon.getMetas('MOVIE', ['zee'], 'IN', 'in');
     movies.vil = await addon.getMetas('MOVIE', ['vil'], 'NL', 'nl');
+    movies.nlz = await addon.getMetas('MOVIE', ['nlz'], 'NL', 'nl');
+    movies.sst = await addon.getMetas('MOVIE', ['sst'], 'NL', 'nl');
     movies.blv = await addon.getMetas('MOVIE', ['blv'], 'TR', 'tr');
     movies.clv = await addon.getMetas('MOVIE', ['clv'], 'BR', 'br');
     movies.gop = await addon.getMetas('MOVIE', ['gop'], 'BR', 'br');
@@ -77,6 +92,7 @@ async function loadNewCatalog() {
     series.nfx = await addon.getMetas('SHOW', ['nfx'], 'GB');
     series.dnp = await addon.getMetas('SHOW', ['dnp'], 'GB');
     series.atp = await addon.getMetas('SHOW', ['atp'], 'GB');
+    series.hay = await addon.getMetas('SHOW', ['hay'], 'GB');
     series.amp = await addon.getMetas('SHOW', ['amp'], 'US');
     series.pmp = await addon.getMetas('SHOW', ['pmp'], 'US');
     series.hbm = await addon.getMetas('SHOW', ['hbm'], 'US');
@@ -84,9 +100,13 @@ async function loadNewCatalog() {
     series.pcp = await addon.getMetas('SHOW', ['pcp'], 'US');
     series.fmn = await addon.getMetas('SHOW', ['fmn'], 'US');
     series.cru = await addon.getMetas('SHOW', ['cru'], 'US');
+    series.cts = await addon.getMetas('SHOW', ['cts'], 'US');
+    series.mgl = await addon.getMetas('SHOW', ['mgl'], 'US');
     series.hst = await addon.getMetas('SHOW', ['hst'], 'IN', 'in');
     series.zee = await addon.getMetas('SHOW', ['zee'], 'IN', 'in');
     series.vil = await addon.getMetas('SHOW', ['vil'], 'NL', 'nl');
+    series.nlz = await addon.getMetas('SHOW', ['nlz'], 'NL', 'nl');
+    series.sst = await addon.getMetas('SHOW', ['sst'], 'NL', 'nl');
     series.blv = await addon.getMetas('SHOW', ['blv'], 'TR', 'tr');
     series.clv = await addon.getMetas('SHOW', ['clv'], 'BR', 'br');
     series.gop = await addon.getMetas('SHOW', ['gop'], 'BR', 'br');
@@ -98,17 +118,20 @@ app.get('/:configuration/manifest.json', (req, res) => {
     res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
     res.setHeader('content-type', 'application/json');
 
-    let buffer = Buffer(req.params.configuration, 'base64');
+    // parse config
+    const buffer = Buffer(req.params?.configuration, 'base64');
+    const [selectedProviders, rpdbKey, countryCode, installedAt] = buffer.toString('ascii')?.split(':');
 
     mixpanel && mixpanel.track('install', {
         ip: req.ip,
         distinct_id: req.ip.replace(/\.|:/g, 'Z'),
         configuration: req.params.configuration,
+        catalogs,
+        rpdbKey,
+        countryCode,
+        installedAt,
     });
 
-    // parse providers
-    let selectedProviders = buffer.toString('ascii');
-    selectedProviders = selectedProviders.split(':')[0].split(',');
     let catalogs = [];
     if (selectedProviders.includes('nfx')) {
         catalogs.push({
@@ -297,6 +320,61 @@ app.get('/:configuration/manifest.json', (req, res) => {
             name: 'Globoplay',
         });
     }
+    if (selectedProviders.includes('hay')) {
+        catalogs.push({
+            id: 'hay',
+            type: 'series',
+            name: 'Hayu',
+        });
+    }
+    if (selectedProviders.includes('nlz')) {
+        catalogs.push({
+            id: 'nlz',
+            type: 'movie',
+            name: 'NLZIET',
+        });
+        catalogs.push({
+            id: 'nlz',
+            type: 'series',
+            name: 'NLZIET',
+        });
+    }
+    if (selectedProviders.includes('sst')) {
+        catalogs.push({
+            id: 'sst',
+            type: 'movie',
+            name: 'SkyShowtime',
+        });
+        catalogs.push({
+            id: 'sst',
+            type: 'series',
+            name: 'SkyShowtime',
+        });
+    }
+    if (selectedProviders.includes('mgl')) {
+        catalogs.push({
+            id: 'mgl',
+            type: 'movie',
+            name: 'MagellanTV',
+        });
+        catalogs.push({
+            id: 'mgl',
+            type: 'series',
+            name: 'MagellanTV',
+        });
+    }
+    if (selectedProviders.includes('cts')) {
+        catalogs.push({
+            id: 'cts',
+            type: 'movie',
+            name: 'Curiosity Stream',
+        });
+        catalogs.push({
+            id: 'cts',
+            type: 'series',
+            name: 'Curiosity Stream',
+        });
+    }
 
     // show catalogs for providers
     res.send({
@@ -319,10 +397,18 @@ app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
     res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
     res.setHeader('content-type', 'application/json');
 
+    // parse config
+    const buffer = Buffer(req.params?.configuration, 'base64');
+    const [selectedProviders, rpdbKey, countryCode, installedAt] = buffer.toString('ascii')?.split(':');
+
     mixpanel && mixpanel.track('catalog', {
         ip: req.ip,
         distinct_id: req.ip.replace(/\.|:/g, 'Z'),
         configuration: req.params?.configuration,
+        catalogs,
+        rpdbKey,
+        countryCode,
+        installedAt,
         catalog_type: req.params.type,
         catalog_id: req.params.id,
         catalog_extra: req.params?.extra,
@@ -339,13 +425,13 @@ app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
     }
 
     if (req.params.type === 'movie') {
-        res.send({ metas: movies[id] });
+        res.send({ metas: addon.replaceRpdbPosters(rpdbKey, movies[id]) });
 
         return;
     }
 
     if (req.params.type === 'series') {
-        res.send({ metas: series[id] });
+        res.send({ metas: addon.replaceRpdbPosters(rpdbKey, series[id]) });
 
         return;
     }
@@ -365,7 +451,7 @@ app.get('/manifest.json', function(req, res) {
         logo: 'https://play-lh.googleusercontent.com/TBRwjS_qfJCSj1m7zZB93FnpJM5fSpMA_wUlFDLxWAb45T9RmwBvQd5cWR5viJJOhkI',
         version: process.env.npm_package_version,
         name: 'Streaming Catalogs',
-        description: 'Trending movies and series on Netflix, HBO Max, Disney+, Hulu and more. Configure to choose your favourite services.',
+        description: 'Trending movies and series on Netflix, HBO Max, Disney+, Apple TV+ and more. Configure to choose your favourite services.',
         catalogs: [
             {
                 id: 'nfx',
@@ -392,14 +478,6 @@ app.get('/manifest.json', function(req, res) {
                 type: 'series',
                 name: 'Disney+',
             }, {
-                id: 'hlu',
-                type: 'movie',
-                name: 'Hulu',
-            }, {
-                id: 'hlu',
-                type: 'series',
-                name: 'Hulu',
-            }, {
                 id: 'amp',
                 type: 'movie',
                 name: 'Prime  Video',
@@ -408,14 +486,6 @@ app.get('/manifest.json', function(req, res) {
                 type: 'series',
                 name: 'Prime Video',
             }, {
-                id: 'pmp',
-                type: 'movie',
-                name: 'Paramount+',
-            }, {
-                id: 'pmp',
-                type: 'series',
-                name: 'Paramount+',
-            }, {
                 id: 'atp',
                 type: 'movie',
                 name: 'Apple TV+',
@@ -423,14 +493,6 @@ app.get('/manifest.json', function(req, res) {
                 id: 'atp',
                 type: 'series',
                 name: 'Apple TV+',
-            }, {
-                id: 'pcp',
-                type: 'movie',
-                name: 'Peacock',
-            }, {
-                id: 'pcp',
-                type: 'series',
-                name: 'Peacock',
             },
         ],
         resources: ['catalog'],
@@ -441,38 +503,6 @@ app.get('/manifest.json', function(req, res) {
         }
     });
 })
-
-
-// app.get('/catalog/:type/:id/:extra?.json', function(req, res) {
-//      res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
-//      res.setHeader('content-type', 'application/json');
-
-//     let id = req.params.id;
-//     if (id === 'top') {
-//         id = 'nfx';
-//     }
-
-//     mixpanel && mixpanel.track('catalog', {
-//         ip: req.ip,
-//         distinct_id: req.ip.replace(/\.|:/g, 'Z'),
-//         catalog_type: req.params.type,
-//         catalog_id: req.params.id,
-//         catalog_extra: req.params?.extra,
-//     });
-
-//     if (req.params.type === 'movie') {
-//         res.send({ metas: movies[id] });
-
-//         return;
-//     }
-
-//     if (req.params.type === 'series') {
-//         res.send({ metas: series[id] });
-
-//         return;
-//     }
-// })
-
 
 // fallback to Vue
 app.get(/.*/, (req, res) => {

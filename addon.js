@@ -3,6 +3,17 @@ import axios from 'axios';
 const AMOUNT = 250;
 
 export default {
+    replaceRpdbPosters(rpdbKey, metas) {
+        if (!rpdbKey) {
+            return metas;
+        }
+
+        metas.forEach(meta => {
+            meta.poster = `https://api.ratingposterdb.com/${rpdbKey}/imdb/poster-default/${meta.id}.jpg`;
+        });
+
+        return metas;
+    },
     async getMetas(type = 'MOVIE', providers = ['nfx'], country = "GB", language = 'en') {
         let res = null;
         try {
@@ -48,11 +59,18 @@ export default {
 
         return res.data.data.popularTitles.edges.map(item => {
             const posterId = item?.node?.content?.posterUrl?.match(/\/poster\/([0-9]+)\//)?.pop();
+            let posterUrl;
+
+            if (posterId) {
+                posterUrl = `https://images.justwatch.com/poster/${posterId}/s332/img`;
+            } else {
+                posterUrl = `https://live.metahub.space/poster/medium/${item.node.content.externalIds.imdbId}/img`;
+            }
 
             return {
                 id: item.node.content.externalIds.imdbId,
                 name: item.node.content.title,
-                poster: posterId ? `https://images.justwatch.com/poster/${posterId}/s332/img` : `https://live.metahub.space/poster/medium/${item.node.content.externalIds.imdbId}/img`,
+                poster: posterUrl,
                 posterShape: 'poster',
                 type: type === 'MOVIE' ? 'movie' : 'series',
             }
