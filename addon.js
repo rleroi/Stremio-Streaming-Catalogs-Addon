@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const AMOUNT = 250;
-const AMOUNT_TO_VERIFY = 250;
+const AMOUNT_TO_VERIFY = 42;
 
 export default {
+    verify: true,
     replaceRpdbPosters(rpdbKey, metas) {
         if (!rpdbKey) {
             return metas;
@@ -65,15 +66,19 @@ export default {
                 return null;
             }
 
-            if (index < AMOUNT_TO_VERIFY) {
+            if (index < AMOUNT_TO_VERIFY && this.verify) {
                 try {
                     await axios.head(`https://www.imdb.com/title/${imdbId}/`, {maxRedirects: 0, headers: {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0'}});
                 } catch(e) {
                     if (e.response.status === 308) {
                         imdbId = e.response.headers?.['location']?.split('/')?.[2];
                         console.log('DUPE imdb redirects to', imdbId);
-                    } else {
+                    } else if (e.response.status === 404) {
+                        console.log('imdb does not exist');
                         return null;
+                    } else {
+                        console.error('Stop verifying, IMDB error', e.response.status);
+                        this.verify = false;
                     }
                 }
             }
