@@ -9,12 +9,14 @@ import addon from './addon.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const errorLog = fs.createWriteStream(path.join(__dirname, 'vue', 'dist', 'error.log'));
-process.stderr.write = errorLog.write.bind(errorLog);
+if (process.env.NODE_ENV === 'production') {
+    const errorLog = fs.createWriteStream(path.join(__dirname, 'vue', 'dist', 'error.log'));
+    process.stderr.write = errorLog.write.bind(errorLog);
 
-process.on('uncaughtException', function (err) {
-    console.error((err && err.stack) ? err.stack : err);
-});
+    process.on('uncaughtException', function (err) {
+        console.error((err && err.stack) ? err.stack : err);
+    });
+}
 
 const app = express();
 app.set('trust proxy', true)

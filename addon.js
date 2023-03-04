@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const AMOUNT = 250;
+const AMOUNT_TO_VERIFY = 25;
 
 export default {
     replaceRpdbPosters(rpdbKey, metas) {
@@ -57,23 +58,41 @@ export default {
 
         console.log(providers.join(','), res.data.data.popularTitles.edges.length);
 
-        return res.data.data.popularTitles.edges.map(item => {
+        return (await Promise.all(res.data.data.popularTitles.edges.map(async (item, index) => {
+            let imdbId = item.node.content.externalIds.imdbId;
+
+            if (!imdbId) {
+                return null;
+            }
+
+            if (index < AMOUNT_TO_VERIFY) {
+                try {
+                    await axios.head(`https://www.imdb.com/title/${imdbId}/`, {maxRedirects: 0, headers: {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0'}});
+                } catch(e) {
+                    if (e.response.status === 308) {
+                        imdbId = e.response.headers?.['location']?.split('/')?.[2];
+                        console.log('DUPE imdb redirects to', imdbId);
+                    } else {
+                        return null;
+                    }
+                }
+            }
+
             const posterId = item?.node?.content?.posterUrl?.match(/\/poster\/([0-9]+)\//)?.pop();
             let posterUrl;
-
             if (posterId) {
                 posterUrl = `https://images.justwatch.com/poster/${posterId}/s332/img`;
             } else {
-                posterUrl = `https://live.metahub.space/poster/medium/${item.node.content.externalIds.imdbId}/img`;
+                posterUrl = `https://live.metahub.space/poster/medium/${imdbId}/img`;
             }
 
             return {
-                id: item.node.content.externalIds.imdbId,
+                id: imdbId,
                 name: item.node.content.title,
                 poster: posterUrl,
                 posterShape: 'poster',
                 type: type === 'MOVIE' ? 'movie' : 'series',
             }
-        }).filter(item => item.id);
+        }))).filter(item => item?.id);
     }
 }
