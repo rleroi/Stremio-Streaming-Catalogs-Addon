@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const AMOUNT = 250;
-const AMOUNT_TO_VERIFY = 24;
+const AMOUNT_TO_VERIFY = 42;
 const DUPES_CACHE = {};
 const DELETED_CACHE = [];
 
@@ -77,17 +77,17 @@ export default {
                 try {
                     await axios.head(`https://www.imdb.com/title/${imdbId}/`, {maxRedirects: 0, headers: {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0'}});
                 } catch(e) {
-                    if (e.response.status === 308) {
-                        const newImdbId = e.response.headers?.['location']?.split('/')?.[2];
+                    if (e.response?.status === 308) {
+                        const newImdbId = e.response?.headers?.['location']?.split('/')?.[2];
                         console.log('DUPE imdb redirects to', newImdbId);
                         DUPES_CACHE[imdbId] = newImdbId;
                         imdbId = newImdbId;
-                    } else if (e.response.status === 404) {
+                    } else if (e.response?.status === 404) {
                         console.log('imdb does not exist');
                         DELETED_CACHE.push(imdbId);
                         return null;
                     } else {
-                        console.error('Stop verifying, IMDB error', e.response.status);
+                        console.error('Stop verifying, IMDB error', e.response?.status);
                         this.verify = false;
                     }
                 }
