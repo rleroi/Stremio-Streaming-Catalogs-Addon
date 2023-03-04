@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const AMOUNT = 250;
-const AMOUNT_TO_VERIFY = 42;
+const AMOUNT_TO_VERIFY = 24;
+const DUPES_CACHE = {};
+const DELETED_CACHE = [];
 
 export default {
     verify: true,
@@ -62,19 +64,27 @@ export default {
         return (await Promise.all(res.data.data.popularTitles.edges.map(async (item, index) => {
             let imdbId = item.node.content.externalIds.imdbId;
 
-            if (!imdbId) {
+            if (!imdbId && DELETED_CACHE.includes(imdbId)) {
+                if (imdbId) console.log('deleted cache hit');
+
                 return null;
             }
 
-            if (index < AMOUNT_TO_VERIFY && this.verify) {
+            if (DUPES_CACHE[imdbId]) {
+                console.log('dupe cache hit');
+                imdbId = DUPES_CACHE[imdbId];
+            } else if (index < AMOUNT_TO_VERIFY && this.verify) {
                 try {
                     await axios.head(`https://www.imdb.com/title/${imdbId}/`, {maxRedirects: 0, headers: {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0'}});
                 } catch(e) {
                     if (e.response.status === 308) {
-                        imdbId = e.response.headers?.['location']?.split('/')?.[2];
-                        console.log('DUPE imdb redirects to', imdbId);
+                        const newImdbId = e.response.headers?.['location']?.split('/')?.[2];
+                        console.log('DUPE imdb redirects to', newImdbId);
+                        DUPES_CACHE[imdbId] = newImdbId;
+                        imdbId = newImdbId;
                     } else if (e.response.status === 404) {
                         console.log('imdb does not exist');
+                        DELETED_CACHE.push(imdbId);
                         return null;
                     } else {
                         console.error('Stop verifying, IMDB error', e.response.status);
