@@ -64,7 +64,7 @@ export default {
         return (await Promise.all(res.data.data.popularTitles.edges.map(async (item, index) => {
             let imdbId = item.node.content.externalIds.imdbId;
 
-            if (!imdbId && DELETED_CACHE.includes(imdbId)) {
+            if (!imdbId || DELETED_CACHE.includes(imdbId)) {
                 if (imdbId) console.log('deleted cache hit');
 
                 return null;
