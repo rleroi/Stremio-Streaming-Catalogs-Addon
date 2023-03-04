@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const AMOUNT = 250;
-const AMOUNT_TO_VERIFY = 25;
+const AMOUNT_TO_VERIFY = 250;
 
 export default {
     replaceRpdbPosters(rpdbKey, metas) {
