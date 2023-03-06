@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const AMOUNT = 250;
-const AMOUNT_TO_VERIFY = 42;
+const AMOUNT_TO_VERIFY = 24;
 const DUPES_CACHE = {};
 const DELETED_CACHE = [];
 
