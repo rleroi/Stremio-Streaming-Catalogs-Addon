@@ -119,8 +119,9 @@
                                     </Popper>
                                 </div>
 
-                                <div>
-                                    <v-input type="text" placeholder="RPDB key (optional)" v-model="state.rpdbKey" />
+                                <div class="flex">
+                                    <v-input type="text" class="rounded-r-none" placeholder="RPDB key (optional)" pattern="t[1-3]-[a-zA-Z0-9\-]+" v-model="state.rpdbKey" />
+                                    <v-button type="button" class="w-auto rounded-l-none border-l-0" @click="openUrl('https://ratingposterdb.com/')">?</v-button>
                                 </div>
 
                                 <div>
@@ -252,6 +253,10 @@ const state = reactive({
     addonUrl: '',
 });
 
+function openUrl(url) {
+    window.open(url, '_blank', 'noopener');
+}
+
 function getCountryCodeFromCountry(country) {
     switch (country) {
         case 'Netherlands':
@@ -279,10 +284,6 @@ function getCountry() {
 
 function showProvider(provider) {
     return state.providers.includes(provider) || regions?.[state.country]?.includes(provider);
-}
-
-function openUrl(url) {
-    window.open(url);
 }
 
 function installAddon() {
