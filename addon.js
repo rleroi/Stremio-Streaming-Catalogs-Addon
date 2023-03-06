@@ -12,11 +12,9 @@ export default {
             return metas;
         }
 
-        metas.forEach(meta => {
-            meta.poster = `https://api.ratingposterdb.com/${rpdbKey}/imdb/poster-default/${meta.id}.jpg`;
+        return metas.map(meta => {
+            return {...meta, poster: `https://api.ratingposterdb.com/${rpdbKey}/imdb/poster-default/${meta.id}.jpg`};
         });
-
-        return metas;
     },
     async getMetas(type = 'MOVIE', providers = ['nfx'], country = "GB", language = 'en') {
         let res = null;
