@@ -51,6 +51,7 @@ let movies = {
     'sst': [],
     'nlz': [],
     //'hay': [],
+    'cpd': [],
 };
 let series = {
     'nfx': [],
@@ -74,6 +75,7 @@ let series = {
     'sst': [],
     'nlz': [],
     'hay': [],
+    'cpd': [],
 };
 async function loadNewCatalog() {
     console.log('loadNewCatalog');
@@ -98,6 +100,7 @@ async function loadNewCatalog() {
     movies.blv = await addon.getMetas('MOVIE', ['blv'], 'TR', 'tr');
     movies.clv = await addon.getMetas('MOVIE', ['clv'], 'BR', 'br');
     movies.gop = await addon.getMetas('MOVIE', ['gop'], 'BR', 'br');
+    movies.cpd = await addon.getMetas('MOVIE', ['cpd'], 'FR', 'fr');
 
     series.nfx = await addon.getMetas('SHOW', ['nfx'], 'GB');
     series.dnp = await addon.getMetas('SHOW', ['dnp'], 'GB');
@@ -120,6 +123,7 @@ async function loadNewCatalog() {
     series.blv = await addon.getMetas('SHOW', ['blv'], 'TR', 'tr');
     series.clv = await addon.getMetas('SHOW', ['clv'], 'BR', 'br');
     series.gop = await addon.getMetas('SHOW', ['gop'], 'BR', 'br');
+    series.cpd = await addon.getMetas('SHOW', ['cpd'], 'FR', 'fr');
     console.log('done');
 }
 
@@ -383,6 +387,18 @@ app.get('/:configuration/manifest.json', (req, res) => {
             id: 'cts',
             type: 'series',
             name: 'Curiosity Stream',
+        });
+    }
+    if (selectedProviders.includes('cpd')) {
+        catalogs.push({
+            id: 'cpd',
+            type: 'movie',
+            name: 'Canal+',
+        });
+        catalogs.push({
+            id: 'cpd',
+            type: 'series',
+            name: 'Canal+',
         });
     }
 

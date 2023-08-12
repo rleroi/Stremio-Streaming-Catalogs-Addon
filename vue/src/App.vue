@@ -117,6 +117,10 @@
                                         <img src="/blu.webp" @click="toggle('blv')" class="rounded-xl"
                                             :class="!isActive('blv') ? 'inactive' : ''" role="button" />
                                     </Popper>
+                                    <Popper v-show="showProvider('cpd')" hover content="Canal+">
+                                        <img src="/canal-plus.webp" @click="toggle('cpd')" class="rounded-xl"
+                                            :class="!isActive('cpd') ? 'inactive' : ''" role="button" />
+                                    </Popper>
                                 </div>
 
                                 <div class="flex">
@@ -214,7 +218,16 @@ const regions = {
         'sst',
         'mgl',
         'cts',
-        'nlz'
+        'nlz',
+    ],
+    'France': [
+        'nfx',
+        'dnp',
+        'amp',
+        'atp',
+        'hbm',
+        'hay',
+        'cpd',
     ],
     'Any': [
         'nfx',
@@ -236,7 +249,8 @@ const regions = {
         'mgl',
         'cts',
         'fmn',
-        'nlz'
+        'nlz',
+        'cpd',
     ],
 };
 
@@ -269,6 +283,8 @@ function getCountryCodeFromCountry(country) {
             return 'br';
         case 'India':
             return 'in';
+        case 'France':
+            return 'fr';
         default:
             return '';
     }
