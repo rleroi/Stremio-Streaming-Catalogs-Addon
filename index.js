@@ -406,11 +406,11 @@ app.get('/:configuration/manifest.json', (req, res) => {
         });
     }
     if (selectedProviders.includes('dpe')) {
-        catalogs.push({
+        /*catalogs.push({
             id: 'dpe',
             type: 'movie',
             name: 'Discovery+',
-        });
+        });*/
         catalogs.push({
             id: 'dpe',
             type: 'series',
