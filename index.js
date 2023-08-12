@@ -83,7 +83,7 @@ async function loadNewCatalog() {
     //movies.hay = await addon.getMetas('MOVIE', ['hay'], 'GB'); // 0 results
     movies.amp = await addon.getMetas('MOVIE', ['amp'], 'US');
     movies.pmp = await addon.getMetas('MOVIE', ['pmp'], 'US');
-    movies.hbm = await addon.getMetas('MOVIE', ['hbm'], 'US');
+    movies.hbm = await addon.getMetas('MOVIE', ['hbm'], 'NL');
     movies.hlu = await addon.getMetas('MOVIE', ['hlu'], 'US');
     movies.pcp = await addon.getMetas('MOVIE', ['pcp'], 'US');
     movies.fmn = await addon.getMetas('MOVIE', ['fmn'], 'US');
@@ -105,7 +105,7 @@ async function loadNewCatalog() {
     series.hay = await addon.getMetas('SHOW', ['hay'], 'GB');
     series.amp = await addon.getMetas('SHOW', ['amp'], 'US');
     series.pmp = await addon.getMetas('SHOW', ['pmp'], 'US');
-    series.hbm = await addon.getMetas('SHOW', ['hbm'], 'US');
+    series.hbm = await addon.getMetas('SHOW', ['hbm'], 'NL');
     series.hlu = await addon.getMetas('SHOW', ['hlu'], 'US');
     series.pcp = await addon.getMetas('SHOW', ['pcp'], 'US');
     series.fmn = await addon.getMetas('SHOW', ['fmn'], 'US');
