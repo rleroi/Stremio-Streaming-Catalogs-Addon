@@ -21,9 +21,13 @@
                     <div class="p-12 bg-gray-800 mx-auto rounded-3xl w-96">
 
                         <div class="mb-7">
-                            <h3 class="font-semibold text-2xl text-gray-100">Configure addon <a
-                                    href="https://discord.gg/XBZFdstZq6" target="_blank"
-                                    class="text-sm text-purple-700 hover:text-purple-600">(?)</a></h3>
+                            <h3 class="font-semibold text-2xl text-gray-100">Configure addon
+                                <Popper hover content="For questions, join our Discord" class="text-sm">
+                                    <a
+                                        href="https://discord.gg/XBZFdstZq6" target="_blank"
+                                        class="text-sm text-purple-700 hover:text-purple-600">(?)</a>
+                                </Popper>
+                            </h3>
                         </div>
                         <div class="text-gray-300">
                             <form class="space-y-6" @submit.prevent="installAddon">
