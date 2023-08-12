@@ -121,6 +121,10 @@
                                         <img src="/canal-plus.webp" @click="toggle('cpd')" class="rounded-xl"
                                             :class="!isActive('cpd') ? 'inactive' : ''" role="button" />
                                     </Popper>
+                                    <Popper v-show="showProvider('dpe')" hover content="Discovery+">
+                                        <img src="/discovery-plus.webp" @click="toggle('dpe')" class="rounded-xl"
+                                            :class="!isActive('dpe') ? 'inactive' : ''" role="button" />
+                                    </Popper>
                                 </div>
 
                                 <div class="flex">
@@ -174,6 +178,7 @@ const regions = {
         'fmn',
         'hlu',
         'pcp',
+        'dpe',
     ],
     'Brazil': [
         'nfx',
@@ -197,6 +202,7 @@ const regions = {
         'hst',
         'mgl',
         'cts',
+        'dpe',
     ],
     'Turkey': [
         'nfx',
@@ -219,6 +225,7 @@ const regions = {
         'mgl',
         'cts',
         'nlz',
+        'dpe',
     ],
     'France': [
         'nfx',
@@ -251,6 +258,7 @@ const regions = {
         'fmn',
         'nlz',
         'cpd',
+        'dpe',
     ],
 };
 

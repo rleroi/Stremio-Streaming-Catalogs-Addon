@@ -52,6 +52,7 @@ let movies = {
     'nlz': [],
     //'hay': [],
     'cpd': [],
+    //'dpe': [],
 };
 let series = {
     'nfx': [],
@@ -76,12 +77,14 @@ let series = {
     'nlz': [],
     'hay': [],
     'cpd': [],
+    'dpe': [],
 };
 async function loadNewCatalog() {
     console.log('loadNewCatalog');
     movies.nfx = await addon.getMetas('MOVIE', ['nfx'], 'GB');
     movies.dnp = await addon.getMetas('MOVIE', ['dnp'], 'GB');
     movies.atp = await addon.getMetas('MOVIE', ['atp'], 'GB');
+    //movies.dpe = await addon.getMetas('MOVIE', ['dpe'], 'GB'); // 1 result
     //movies.hay = await addon.getMetas('MOVIE', ['hay'], 'GB'); // 0 results
     movies.amp = await addon.getMetas('MOVIE', ['amp'], 'US');
     movies.pmp = await addon.getMetas('MOVIE', ['pmp'], 'US');
@@ -106,6 +109,7 @@ async function loadNewCatalog() {
     series.dnp = await addon.getMetas('SHOW', ['dnp'], 'GB');
     series.atp = await addon.getMetas('SHOW', ['atp'], 'GB');
     series.hay = await addon.getMetas('SHOW', ['hay'], 'GB');
+    series.dpe = await addon.getMetas('SHOW', ['dpe'], 'GB');
     series.amp = await addon.getMetas('SHOW', ['amp'], 'US');
     series.pmp = await addon.getMetas('SHOW', ['pmp'], 'US');
     series.hbm = await addon.getMetas('SHOW', ['hbm'], 'NL');
@@ -399,6 +403,18 @@ app.get('/:configuration/manifest.json', (req, res) => {
             id: 'cpd',
             type: 'series',
             name: 'Canal+',
+        });
+    }
+    if (selectedProviders.includes('dpe')) {
+        catalogs.push({
+            id: 'dpe',
+            type: 'movie',
+            name: 'Discovery+',
+        });
+        catalogs.push({
+            id: 'dpe',
+            type: 'series',
+            name: 'Discovery+',
         });
     }
 
