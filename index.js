@@ -529,7 +529,7 @@ app.get(/.*/, (req, res) => {
 });
 
 loadNewCatalog();
-setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL | 21600000);
+setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL || 21600000);
 
 app.listen(process.env.PORT || 9000, () => {
     console.log('http://127.0.0.1:9000/manifest.json');
