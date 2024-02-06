@@ -104,7 +104,10 @@ export default {
             // get better metadata from cinemeta
             const cinemeta = await axios.get(`https://v3-cinemeta.strem.io/meta/${type === 'MOVIE' ? 'movie' : 'series'}/${imdbId}.json`);
 
-            return { ...cinemeta.data?.meta, ...{id: imdbId, poster: posterUrl, videos: undefined}} || {
+            return cinemeta.data?.meta ? {
+                ...cinemeta.data?.meta,
+                ...{ id: imdbId, poster: posterUrl, videos: undefined },
+            } : {
                 id: imdbId,
                 name: item.node.content.title,
                 poster: posterUrl,
