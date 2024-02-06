@@ -53,7 +53,7 @@ export default {
             });
         } catch (e) {
             console.error(e.message);
-            console.log(e.response.data);
+            console.log(e.response?.data);
 
             return [];
         }
