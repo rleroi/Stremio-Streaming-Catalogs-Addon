@@ -164,7 +164,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, onMounted } from 'vue';
 import regionsToCountries from './regions-to-countries.json'
 import VButton from "./components/VButton.vue";
 import VInput from "./components/VInput.vue";
@@ -276,6 +276,8 @@ const state = reactive({
         'atp',
         'hbm',
     ],
+    countryCode: null,
+    timeStamp: null,
     addonUrl: '',
 });
 
@@ -314,6 +316,29 @@ function showProvider(provider) {
     return state.providers.includes(provider) || regions?.[state.country]?.includes(provider);
 }
 
+onMounted(() => {
+    decodeUrlConfig();
+})
+
+function decodeUrlConfig() {
+    const urlParts = document.location.href.split('/');
+    const configure = urlParts.pop();
+    if (configure !== 'configure') {
+        return;
+    }
+
+    try {
+        const configString = atob(decodeURIComponent(urlParts.pop())).split(':');
+        const [providers, rpdbKey, countryCode, timeStamp] = configString;
+        state.rpdbKey = rpdbKey;
+        state.providers = providers.split(',');
+        state.countryCode = countryCode;
+        state.timeStamp = timeStamp;
+    } catch (e) {
+        console.log('No valid configuration:', e.message);
+    }
+}
+
 function installAddon() {
     if (!state.providers.length) {
         alert('Please choose at least 1 provider');
@@ -321,7 +346,7 @@ function installAddon() {
         return;
     }
 
-    const base64 = btoa(`${state.providers.join(',')}:${state.rpdbKey}:${getCountryCodeFromCountry(state.country)}:${Number(new Date())}`);
+    const base64 = btoa(`${state.providers.join(',')}:${state.rpdbKey}:${state.countryCode || getCountryCodeFromCountry(state.country)}:${state.timeStamp || Number(new Date())}`);
     state.addonUrl = `${import.meta.env.VITE_APP_URL}/${encodeURIComponent(base64)}/manifest.json`;
 
     console.log('URL:', state.addonUrl);
