@@ -132,7 +132,7 @@
                                 </div>
 
                                 <div class="flex">
-                                    <v-input type="text" class="rounded-r-none h-[46px]" placeholder="RPDB key (optional)" pattern="t[1-3]-[a-zA-Z0-9\-]+" v-model="state.rpdbKey" />
+                                    <v-input type="text" class="rounded-r-none h-[46px]" placeholder="RPDB key (optional)" pattern="t[0-3]-[a-zA-Z0-9\-]+" v-model="state.rpdbKey" />
                                     <v-button type="button" class="w-auto rounded-l-none border-l-0 h-[46px]" @click="openUrl('https://ratingposterdb.com/')">?</v-button>
                                 </div>
 
