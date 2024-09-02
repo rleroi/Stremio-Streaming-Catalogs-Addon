@@ -45,6 +45,10 @@
                                         <img src="/netflix.webp" @click="toggle('nfx')" class="rounded-xl"
                                             :class="!isActive('nfx') ? 'inactive' : ''" role="button" />
                                     </Popper>
+                                    <Popper v-show="showProvider('nfk')" hover content="Netflix Kids">
+                                        <img src="/netflixkids.webp" @click="toggle('nfk')" class="rounded-xl"
+                                            :class="!isActive('nfk') ? 'inactive' : ''" role="button" />
+                                    </Popper>
                                     <Popper v-show="showProvider('hbm')" hover content="HBO Max">
                                         <img src="/hbo.webp" @click="toggle('hbm')" class="rounded-xl"
                                             :class="!isActive('hbm') ? 'inactive' : ''" role="button" />
@@ -81,9 +85,9 @@
                                         <img src="/magellan.webp" @click="toggle('mgl')" class="rounded-xl"
                                             :class="!isActive('mgl') ? 'inactive' : ''" role="button" />
                                     </Popper>
-                                    <Popper v-show="showProvider('fmn')" hover content="Funimation Now">
-                                        <img src="/funimation.webp" @click="toggle('fmn')" class="rounded-xl"
-                                            :class="!isActive('fmn') ? 'inactive' : ''" role="button" />
+                                    <Popper v-show="showProvider('cru')" hover content="Crunchyroll">
+                                        <img src="/crunchyroll.webp" @click="toggle('cru')" class="rounded-xl"
+                                            :class="!isActive('cru') ? 'inactive' : ''" role="button" />
                                     </Popper>
                                     <Popper v-show="showProvider('hay')" hover content="Hayu">
                                         <img src="/hayu.webp" @click="toggle('hay')" class="rounded-xl"
@@ -172,26 +176,28 @@ import VInput from "./components/VInput.vue";
 const regions = {
     'United States': [
         'nfx',
+        'nfk',
         'dnp',
         'amp',
         'atp',
         'hbm',
+        'cru',
         'pmp',
         'mgl',
         'cts',
-        'fmn',
         'hlu',
         'pcp',
         'dpe',
     ],
     'Brazil': [
         'nfx',
+        'nfk',
         'dnp',
         'atp',
         'amp',
         'pmp',
         'hbm',
-        'fmn',
+        'cru',
         'clv',
         'gop',
         'mgl',
@@ -200,8 +206,10 @@ const regions = {
     'India': [
         'hay',
         'nfx',
+        'nfk',
         'atp',
         'amp',
+        'cru',
         'zee',
         'hst',
         'mgl',
@@ -210,19 +218,23 @@ const regions = {
     ],
     'Turkey': [
         'nfx',
+        'nfk',
         'dnp',
         'atp',
         'amp',
+        'cru',
         'blv',
         'mgl',
         'cts',
     ],
     'Netherlands': [
         'nfx',
+        'nfk',
         'dnp',
         'amp',
         'atp',
         'hbm',
+        'cru',
         'hay',
         'vil',
         'sst',
@@ -233,6 +245,7 @@ const regions = {
     ],
     'France': [
         'nfx',
+        'nfk',
         'dnp',
         'amp',
         'atp',
@@ -242,6 +255,7 @@ const regions = {
     ],
     'Any': [
         'nfx',
+        'nfk',
         'dnp',
         'amp',
         'atp',
@@ -259,7 +273,7 @@ const regions = {
         'sst',
         'mgl',
         'cts',
-        'fmn',
+        'cru',
         'nlz',
         'cpd',
         'dpe',

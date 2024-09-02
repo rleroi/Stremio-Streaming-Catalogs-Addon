@@ -31,6 +31,7 @@ if (process.env.MIXPANEL_KEY) {
 
 let movies = {
     'nfx': [],
+    'nfk': [],
     'dnp': [],
     'amp': [],
     'atp': [],
@@ -38,8 +39,7 @@ let movies = {
     'hbm': [],
     'hlu': [],
     'pcp': [],
-    'fmn': [],
-    //'cru': [],
+    'cru': [],
     'hst': [],
     'zee': [],
     'vil': [],
@@ -56,6 +56,7 @@ let movies = {
 };
 let series = {
     'nfx': [],
+    'nfk': [],
     'dnp': [],
     'amp': [],
     'atp': [],
@@ -63,7 +64,6 @@ let series = {
     'hbm': [],
     'hlu': [],
     'pcp': [],
-    'fmn': [],
     'cru': [],
     'hst': [],
     'zee': [],
@@ -82,6 +82,7 @@ let series = {
 async function loadNewCatalog() {
     console.log('loadNewCatalog');
     movies.nfx = await addon.getMetas('MOVIE', ['nfx'], 'GB');
+    movies.nfx = await addon.getMetas('MOVIE', ['nfk'], 'US');
     movies.dnp = await addon.getMetas('MOVIE', ['dnp'], 'GB');
     movies.atp = await addon.getMetas('MOVIE', ['atp'], 'GB');
     //movies.dpe = await addon.getMetas('MOVIE', ['dpe'], 'GB'); // 1 result
@@ -91,10 +92,9 @@ async function loadNewCatalog() {
     movies.hbm = await addon.getMetas('MOVIE', ['hbm'], 'NL');
     movies.hlu = await addon.getMetas('MOVIE', ['hlu'], 'US');
     movies.pcp = await addon.getMetas('MOVIE', ['pcp'], 'US');
-    movies.fmn = await addon.getMetas('MOVIE', ['fmn'], 'US');
     movies.cts = await addon.getMetas('MOVIE', ['cts'], 'US');
     movies.mgl = await addon.getMetas('MOVIE', ['mgl'], 'US');
-    //movies.cru = await addon.getMetas('MOVIE', ['cru'], 'US'); // only 1 result
+    movies.cru = await addon.getMetas('MOVIE', ['cru'], 'US'); 
     movies.hst = await addon.getMetas('MOVIE', ['hst'], 'IN', 'in');
     movies.zee = await addon.getMetas('MOVIE', ['zee'], 'IN', 'in');
     movies.vil = await addon.getMetas('MOVIE', ['vil'], 'NL', 'nl');
@@ -106,6 +106,7 @@ async function loadNewCatalog() {
     movies.cpd = await addon.getMetas('MOVIE', ['cpd'], 'FR', 'fr');
 
     series.nfx = await addon.getMetas('SHOW', ['nfx'], 'GB');
+    series.nfx = await addon.getMetas('SHOW', ['nfk'], 'US');
     series.dnp = await addon.getMetas('SHOW', ['dnp'], 'GB');
     series.atp = await addon.getMetas('SHOW', ['atp'], 'GB');
     series.hay = await addon.getMetas('SHOW', ['hay'], 'GB');
@@ -115,7 +116,6 @@ async function loadNewCatalog() {
     series.hbm = await addon.getMetas('SHOW', ['hbm'], 'NL');
     series.hlu = await addon.getMetas('SHOW', ['hlu'], 'US');
     series.pcp = await addon.getMetas('SHOW', ['pcp'], 'US');
-    series.fmn = await addon.getMetas('SHOW', ['fmn'], 'US');
     series.cru = await addon.getMetas('SHOW', ['cru'], 'US');
     series.cts = await addon.getMetas('SHOW', ['cts'], 'US');
     series.mgl = await addon.getMetas('SHOW', ['mgl'], 'US');
@@ -161,6 +161,18 @@ app.get('/:configuration/manifest.json', (req, res) => {
             id: 'nfx',
             type: 'series',
             name: 'Netflix',
+        });
+    }
+    if (selectedProviders.includes('nfk')) {
+        catalogs.push({
+            id: 'nfk',
+            type: 'movie',
+            name: 'Netflix Kids',
+        });
+        catalogs.push({
+            id: 'nfk',
+            type: 'series',
+            name: 'Netflix Kids',
         });
     }
     if (selectedProviders.includes('hbm')) {
@@ -247,19 +259,12 @@ app.get('/:configuration/manifest.json', (req, res) => {
             name: 'Peacock',
         });
     }
-    if (selectedProviders.includes('fmn')) {
+    if (selectedProviders.includes('cru') || selectedProviders.includes('fmn')) {
         catalogs.push({
-            id: 'fmn',
+            id: 'cru',
             type: 'movie',
-            name: 'Funimation',
+            name: 'Crunchyroll',
         });
-        catalogs.push({
-            id: 'fmn',
-            type: 'series',
-            name: 'Funimation',
-        });
-    }
-    if (selectedProviders.includes('cru')) {
         catalogs.push({
             id: 'cru',
             type: 'series',
