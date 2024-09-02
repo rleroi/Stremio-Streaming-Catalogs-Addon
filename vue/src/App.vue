@@ -45,10 +45,10 @@
                                         <img src="/netflix.webp" @click="toggle('nfx')" class="rounded-xl"
                                             :class="!isActive('nfx') ? 'inactive' : ''" role="button" />
                                     </Popper>
-                                    <Popper v-show="showProvider('nfk')" hover content="Netflix Kids">
+                                    <!-- <Popper v-show="showProvider('nfk')" hover content="Netflix Kids">
                                         <img src="/netflixkids.webp" @click="toggle('nfk')" class="rounded-xl"
                                             :class="!isActive('nfk') ? 'inactive' : ''" role="button" />
-                                    </Popper>
+                                    </Popper> -->
                                     <Popper v-show="showProvider('hbm')" hover content="HBO Max">
                                         <img src="/hbo.webp" @click="toggle('hbm')" class="rounded-xl"
                                             :class="!isActive('hbm') ? 'inactive' : ''" role="button" />
@@ -364,6 +364,7 @@ function installAddon() {
     state.addonUrl = `${import.meta.env.VITE_APP_URL}/${encodeURIComponent(base64)}/manifest.json`;
 
     console.log('URL:', state.addonUrl);
+    navigator.clipboard.writeText(state.addonUrl).catch(console.error);
 
     window.location.href = state.addonUrl.replace(/https?:\/\//, 'stremio://');
 }

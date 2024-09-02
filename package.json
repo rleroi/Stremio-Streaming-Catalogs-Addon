@@ -1,6 +1,6 @@
 {
   "name": "stremio-netflix-catalog-addon",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "index.js",
   "type": "module",
