@@ -16,6 +16,9 @@ export default {
             return {...meta, poster: `https://api.ratingposterdb.com/${rpdbKey}/imdb/poster-default/${meta.id}.jpg`};
         });
     },
+    async getLatest(type = 'MOVIE', providers = ['nfx'], country = "GB", language = 'en') {
+        // todo
+    },
     async getMetas(type = 'MOVIE', providers = ['nfx'], country = "GB", language = 'en') {
         let res = null;
         try {
@@ -100,13 +103,12 @@ export default {
                 posterUrl = `https://live.metahub.space/poster/medium/${imdbId}/img`;
             }
 
-
             // get better metadata from cinemeta
             const cinemeta = await axios.get(`https://v3-cinemeta.strem.io/meta/${type === 'MOVIE' ? 'movie' : 'series'}/${imdbId}.json`);
 
             return cinemeta.data?.meta ? {
                 ...cinemeta.data?.meta,
-                ...{ id: imdbId, poster: posterUrl, videos: undefined },
+                ...{ id: imdbId, name: item.node.content.title, poster: posterUrl, videos: undefined },
             } : {
                 id: imdbId,
                 name: item.node.content.title,
