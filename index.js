@@ -82,7 +82,7 @@ let series = {
 async function loadNewCatalog() {
     console.log('loadNewCatalog');
     movies.nfx = await addon.getMetas('MOVIE', ['nfx'], 'GB');
-    movies.nfx = await addon.getMetas('MOVIE', ['nfk'], 'US');
+    movies.nfk = await addon.getMetas('MOVIE', ['nfk'], 'US');
     movies.dnp = await addon.getMetas('MOVIE', ['dnp'], 'GB');
     movies.atp = await addon.getMetas('MOVIE', ['atp'], 'GB');
     //movies.dpe = await addon.getMetas('MOVIE', ['dpe'], 'GB'); // 1 result
@@ -94,7 +94,7 @@ async function loadNewCatalog() {
     movies.pcp = await addon.getMetas('MOVIE', ['pcp'], 'US');
     movies.cts = await addon.getMetas('MOVIE', ['cts'], 'US');
     movies.mgl = await addon.getMetas('MOVIE', ['mgl'], 'US');
-    movies.cru = await addon.getMetas('MOVIE', ['cru'], 'US'); 
+    movies.cru = await addon.getMetas('MOVIE', ['cru'], 'US');
     movies.hst = await addon.getMetas('MOVIE', ['hst'], 'IN', 'in');
     movies.zee = await addon.getMetas('MOVIE', ['zee'], 'IN', 'in');
     movies.vil = await addon.getMetas('MOVIE', ['vil'], 'NL', 'nl');
@@ -106,7 +106,7 @@ async function loadNewCatalog() {
     movies.cpd = await addon.getMetas('MOVIE', ['cpd'], 'FR', 'fr');
 
     series.nfx = await addon.getMetas('SHOW', ['nfx'], 'GB');
-    series.nfx = await addon.getMetas('SHOW', ['nfk'], 'US');
+    series.nfk = await addon.getMetas('SHOW', ['nfk'], 'US');
     series.dnp = await addon.getMetas('SHOW', ['dnp'], 'GB');
     series.atp = await addon.getMetas('SHOW', ['atp'], 'GB');
     series.hay = await addon.getMetas('SHOW', ['hay'], 'GB');
