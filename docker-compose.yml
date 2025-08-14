@@ -1,0 +1,33 @@
+services:
+  stremio-addon:
+    build: .
+    ports:
+      - "7700:7700"
+    environment:
+      - NODE_ENV=production
+      - PORT=7700
+    volumes:
+      - ./cache:/app/cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/manifest.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  stremio-addon-dev:
+    build: .
+    ports:
+      - "7701:7700"
+    environment:
+      - NODE_ENV=development
+      - PORT=7700
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/vue/node_modules
+      - ./cache:/app/cache
+    command: npm run dev
+    profiles:
+      - dev

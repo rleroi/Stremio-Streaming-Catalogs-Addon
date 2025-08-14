@@ -43,13 +43,13 @@ let movies = {
     'hst': [],
     'zee': [],
     'vil': [],
-    'blv': [],
     'clv': [],
     'gop': [],
     'mgl': [],
     'cts': [],
     'sst': [],
     'nlz': [],
+    'stz': [],
     //'hay': [],
     'cpd': [],
     //'dpe': [],
@@ -68,13 +68,13 @@ let series = {
     'hst': [],
     'zee': [],
     'vil': [],
-    'blv': [],
     'clv': [],
     'gop': [],
     'mgl': [],
     'cts': [],
     'sst': [],
     'nlz': [],
+    'stz': [],
     'hay': [],
     'cpd': [],
     'dpe': [],
@@ -100,10 +100,10 @@ async function loadNewCatalog() {
     movies.vil = await addon.getMetas('MOVIE', ['vil'], 'NL', 'nl');
     movies.nlz = await addon.getMetas('MOVIE', ['nlz'], 'NL', 'nl');
     movies.sst = await addon.getMetas('MOVIE', ['sst'], 'NL', 'nl');
-    movies.blv = await addon.getMetas('MOVIE', ['blv'], 'TR', 'tr');
     movies.clv = await addon.getMetas('MOVIE', ['clv'], 'BR', 'br');
     movies.gop = await addon.getMetas('MOVIE', ['gop'], 'BR', 'br');
     movies.cpd = await addon.getMetas('MOVIE', ['cpd'], 'FR', 'fr');
+    movies.stz = await addon.getMetas('MOVIE', ['stz'], 'US');
 
     series.nfx = await addon.getMetas('SHOW', ['nfx'], 'GB');
     series.nfk = await addon.getMetas('SHOW', ['nfk'], 'US');
@@ -124,10 +124,10 @@ async function loadNewCatalog() {
     series.vil = await addon.getMetas('SHOW', ['vil'], 'NL', 'nl');
     series.nlz = await addon.getMetas('SHOW', ['nlz'], 'NL', 'nl');
     series.sst = await addon.getMetas('SHOW', ['sst'], 'NL', 'nl');
-    series.blv = await addon.getMetas('SHOW', ['blv'], 'TR', 'tr');
     series.clv = await addon.getMetas('SHOW', ['clv'], 'BR', 'br');
     series.gop = await addon.getMetas('SHOW', ['gop'], 'BR', 'br');
     series.cpd = await addon.getMetas('SHOW', ['cpd'], 'FR', 'fr');
+    series.stz = await addon.getMetas('SHOW', ['stz'], 'US');
     console.log('done');
 }
 
@@ -307,18 +307,6 @@ app.get('/:configuration/manifest.json', (req, res) => {
             name: 'Videoland',
         });
     }
-    if (selectedProviders.includes('blv')) {
-        catalogs.push({
-            id: 'blv',
-            type: 'movie',
-            name: 'BluTV',
-        });
-        catalogs.push({
-            id: 'blv',
-            type: 'series',
-            name: 'BluTV',
-        });
-    }
     if (selectedProviders.includes('clv')) {
         catalogs.push({
             id: 'clv',
@@ -408,6 +396,18 @@ app.get('/:configuration/manifest.json', (req, res) => {
             id: 'cpd',
             type: 'series',
             name: 'Canal+',
+        });
+    }
+    if (selectedProviders.includes('stz')) {
+        catalogs.push({
+            id: 'stz',
+            type: 'movie',
+            name: 'Starz',
+        });
+        catalogs.push({
+            id: 'stz',
+            type: 'series',
+            name: 'Starz',
         });
     }
     if (selectedProviders.includes('dpe')) {

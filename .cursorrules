@@ -1,0 +1,188 @@
+# Stremio Streaming Catalogs Addon - Development Rules
+
+## Project Overview
+This is a Stremio addon that provides streaming catalogs from 20+ streaming services (Netflix, Disney+, HBO Max, etc.). It consists of a Node.js/Express backend and a Vue.js frontend.
+
+## Architecture
+- **Backend**: Express.js server serving Stremio addon API endpoints
+- **Frontend**: Vue.js 3 + Vite + Tailwind CSS web interface
+- **Ports**: Backend runs on 7700, Frontend dev server on 5173
+- **Build**: Frontend builds to `vue/dist/` which backend serves statically
+
+## Key Files
+- `index.js` - Main Express server with addon endpoints
+- `addon.js` - Core addon logic for fetching streaming catalogs
+- `vue/src/App.vue` - Main Vue component with streaming service selection
+- `vue/dist/` - Built frontend (generated, not committed to git)
+
+## Environment Variables
+- Backend: Optional `.env` in root (MIXPANEL_KEY, PORT, REFRESH_INTERVAL, NODE_ENV)
+- Frontend: `vue/.env` (production) and `vue/.env.development` (dev) - both included in repo
+- Critical: `VITE_APP_URL` in frontend .env files must point to backend URL
+
+## Development Workflow
+1. Backend: `npm run dev` (nodemon auto-reload)
+2. Frontend: `cd vue && npm run dev` (Vite hot reload)
+3. Build: `cd vue && npm run build` (creates dist for backend to serve)
+
+## Common Issues & Solutions
+- **Server crashes on startup**: Usually due to external API rate limits or network issues in `loadNewCatalog()`
+- **Frontend not loading**: Check `VITE_APP_URL` in .env files points to correct backend URL
+- **Build issues**: Ensure `vue/dist/` exists (run `npm run build` in vue directory)
+- **Rate limiting (429 errors)**: Use local JSON cache system to avoid repeated API calls during development
+
+## Caching System
+- **Cache Location**: `./cache/` directory (auto-created)
+- **Cache Duration**: 6 hours (configurable via `CACHE_DURATION`)
+- **Cache Files**: Named by type, providers, country, language (e.g., `MOVIE_nfx_GB_en.json`)
+- **Cache Benefits**: 
+  - Prevents rate limiting during development
+  - Faster startup times
+  - Reduces API calls
+- **Cache Management**: 
+  - Auto-clears after 6 hours
+  - Manual clear: `addon.clearCache()`
+  - Excluded from git (in .gitignore)
+
+## API Endpoints
+- `/manifest.json` - Stremio addon manifest
+- `/:configuration/manifest.json` - Dynamic manifest based on user selection
+- `/catalog/:type/:id.json` - Streaming catalog data
+- All other routes serve the Vue frontend
+
+## External Dependencies
+- Fetches catalogs from various streaming service APIs
+- Uses Mixpanel for analytics (optional)
+- Requires internet connection for catalog loading
+
+## Git Considerations
+- `vue/dist/` is in .gitignore (build artifacts)
+- `.env` files are committed (pre-configured for dev/prod)
+- `node_modules/` excluded from both root and vue directories
+
+## Performance Notes
+- Catalogs refresh every 6 hours by default (configurable via REFRESH_INTERVAL)
+- Server caches responses with appropriate headers
+- Frontend uses Vite for fast development builds
+
+## Deployment
+- Backend serves built frontend from `vue/dist/`
+- Production: Set NODE_ENV=production, build frontend, start backend
+- Environment files already configured for both dev and production
+
+## Adding New Streaming Providers
+
+### Required Information for Each Provider
+1. **JustWatch Provider Code**: Extract from GraphQL responses (e.g., 'nfx', 'starz')
+2. **Display Name**: User-friendly name (e.g., 'Netflix', 'Starz')
+3. **Icon File**: WebP format, download from JustWatch CDN
+4. **Best Country**: Determine which country has most content (e.g., 'US', 'GB')
+5. **Content Types**: Movies, Series, or both
+6. **Available Regions**: Which countries should show this provider
+
+### Integration Steps
+
+#### 1. Backend (index.js)
+- Add to `movies` object: `'starz': []`
+- Add to `series` object: `'starz': []`
+- Add catalog loading in `loadNewCatalog()`:
+  ```javascript
+  movies.starz = await addon.getMetas('MOVIE', ['starz'], 'US');
+  series.starz = await addon.getMetas('SHOW', ['starz'], 'US');
+  ```
+- Add manifest catalogs in `/:configuration/manifest.json`:
+  ```javascript
+  if (selectedProviders.includes('starz')) {
+      catalogs.push({
+          id: 'starz',
+          type: 'movie',
+          name: 'Starz',
+      });
+      catalogs.push({
+          id: 'starz',
+          type: 'series',
+          name: 'Starz',
+      });
+  }
+  ```
+
+#### 2. Frontend (App.vue)
+- Add provider icon to template:
+  ```html
+  <Popper v-show="showProvider('starz')" hover content="Starz">
+      <img src="/starz.webp" @click="toggle('starz')" class="rounded-xl"
+          :class="!isActive('starz') ? 'inactive' : ''" role="button" />
+  </Popper>
+  ```
+- Add to `regions` object for country filtering:
+  ```javascript
+  'United States': ['nfx', 'nfk', 'dnp', 'starz', ...],
+  'Any': ['nfx', 'nfk', 'dnp', 'starz', ...],
+  ```
+
+#### 3. Icon File
+- Download icon from JustWatch CDN
+- Save as `starz.webp` in `vue/public/` directory
+- Icon URL format: `https://images.justwatch.com/icon/[ID]/s100/[provider].jpeg`
+
+### Provider Research Process
+**CRITICAL: Never make assumptions - always test everything using GraphQL queries!**
+
+1. **Visit JustWatch provider page**: `https://www.justwatch.com/us/provider/starz`
+2. **Inspect network requests** to find GraphQL queries
+3. **Query GraphQL directly** to get accurate provider codes (don't guess!)
+4. **Test multiple countries** to determine which regions are actually available
+5. **Extract icon URL** from GraphQL Package type responses
+6. **Verify content availability** by testing different countries and content types
+
+### GraphQL Testing Approach
+- **Provider Code**: Query `packages(country: Country!, platform: Platform!)` to get actual codes
+- **Available Regions**: Test multiple countries to see where provider appears
+- **Content Types**: Test both 'MOVIE' and 'SHOW' to see what's available
+- **Icon URLs**: Extract from Package.icon field in GraphQL responses
+- **Content Count**: Use `popularTitles` query to see which country has most content
+
+### Current Provider Distribution
+- **United States**: Netflix, Disney+, Prime, Apple TV+, HBO Max, Paramount+, Peacock, Hulu, Crunchyroll, Curiosity Stream, MagellanTV, Discovery+
+- **Brazil**: Netflix, Disney+, Prime, Apple TV+, HBO Max, Paramount+, Crunchyroll, Clarovideo, Globoplay, MagellanTV, Curiosity Stream
+- **India**: Netflix, Disney+, Prime, Apple TV+, Crunchyroll, Zee5, Hotstar, MagellanTV, Curiosity Stream, Discovery+
+- **Turkey**: Netflix, Disney+, Prime, Apple TV+, Crunchyroll, BluTV, MagellanTV, Curiosity Stream
+- **Netherlands**: Netflix, Disney+, Prime, Apple TV+, HBO Max, Crunchyroll, Hayu, Videoland, SkyShowtime, MagellanTV, Curiosity Stream, NLZIET, Discovery+
+- **France**: Netflix, Disney+, Prime, Apple TV+, HBO Max, Hayu, Canal+
+- **Any**: All providers (global fallback)
+
+### Common Provider Codes
+- nfx: Netflix
+- nfk: Netflix Kids
+- dnp: Disney+
+- amp: Prime Video
+- atp: Apple TV+
+- hbm: HBO Max
+- pmp: Paramount+
+- pcp: Peacock
+- hlu: Hulu
+- cru: Crunchyroll
+- cts: Curiosity Stream
+- mgl: MagellanTV
+- hst: Hotstar
+- zee: Zee5
+- vil: Videoland
+- blv: BluTV
+- clv: Clarovideo
+- gop: Globoplay
+- hay: Hayu
+- nlz: NLZIET
+- sst: SkyShowtime
+- cpd: Canal+
+- dpe: Discovery+
+- stz: Starz
+
+### Key Learnings from Starz Integration
+1. **Provider Code Discovery**: Always query GraphQL `packages` endpoint to get exact provider codes (e.g., 'stz' not 'starz')
+2. **Regional Testing**: Test all supported countries (US, GB, NL, BR, IN, DE, FR) to determine availability
+3. **Content Verification**: Query both MOVIE and SHOW types to confirm content availability and counts
+4. **Icon Download**: Use exact icon URL from GraphQL Package.icon field, download as .webp format
+5. **Integration Order**: Backend first (movies/series objects, catalog loading, manifest), then frontend (icon, regions)
+6. **Testing**: Verify catalogs work via `/catalog/movie/stz.json` and `/catalog/series/stz.json` endpoints
+7. **Regional Distribution**: Add to 'United States' and 'Any' regions for US-only providers
+8. **Success Indicators**: Backend logs show "stz 100" (movies) and "stz 52" (series) when working correctly

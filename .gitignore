@@ -2,3 +2,48 @@ node_modules
 .DS_Store
 vue/dist/error.log
 .idea
+
+# Build outputs
+vue/dist/
+dist/
+
+# Environment files
+.env.local
+.env.production
+# Keep pre-configured frontend env files
+!vue/.env
+!vue/.env.development
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Cache directory
+cache/

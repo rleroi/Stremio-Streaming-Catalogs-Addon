@@ -24,7 +24,7 @@
                             <h3 class="font-semibold text-2xl text-gray-100">Configure addon
                                 <Popper hover content="For questions, join our Discord" class="text-sm">
                                     <a
-                                        href="https://discord.gg/XBZFdstZq6" target="_blank"
+                                        href="https://discord.gg/uggmYJ7jVX" target="_blank"
                                         class="text-sm text-purple-700 hover:text-purple-600">(?)</a>
                                 </Popper>
                             </h3>
@@ -121,13 +121,14 @@
                                         <img src="/skyshowtime.webp" @click="toggle('sst')" class="rounded-xl"
                                             :class="!isActive('sst') ? 'inactive' : ''" role="button" />
                                     </Popper>
-                                    <Popper v-show="showProvider('blv')" hover content="BluTV">
-                                        <img src="/blu.webp" @click="toggle('blv')" class="rounded-xl"
-                                            :class="!isActive('blv') ? 'inactive' : ''" role="button" />
-                                    </Popper>
+
                                     <Popper v-show="showProvider('cpd')" hover content="Canal+">
                                         <img src="/canal-plus.webp" @click="toggle('cpd')" class="rounded-xl"
                                             :class="!isActive('cpd') ? 'inactive' : ''" role="button" />
+                                    </Popper>
+                                    <Popper v-show="showProvider('stz')" hover content="Starz">
+                                        <img src="/starz.webp" @click="toggle('stz')" class="rounded-xl"
+                                            :class="!isActive('stz') ? 'inactive' : ''" role="button" />
                                     </Popper>
                                     <Popper v-show="showProvider('dpe')" hover content="Discovery+">
                                         <img src="/discovery-plus.webp" @click="toggle('dpe')" class="rounded-xl"
@@ -187,6 +188,7 @@ const regions = {
         'cts',
         'hlu',
         'pcp',
+        'stz',
         'dpe',
     ],
     'Brazil': [
@@ -223,7 +225,6 @@ const regions = {
         'atp',
         'amp',
         'cru',
-        'blv',
         'mgl',
         'cts',
     ],
@@ -265,7 +266,6 @@ const regions = {
         'pcp',
         'clv',
         'gop',
-        'blv',
         'zee',
         'hst',
         'hay',
@@ -276,6 +276,7 @@ const regions = {
         'cru',
         'nlz',
         'cpd',
+        'stz',
         'dpe',
     ],
 };

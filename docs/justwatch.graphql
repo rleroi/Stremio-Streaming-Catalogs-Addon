@@ -1,0 +1,850 @@
+# Root Query Type
+type Query {
+    streamingCharts(
+        country: Country!
+        filter: StreamingChartsFilter
+        first: Int! = 70
+        after: String
+    ): StreamingChartsConnection
+    popularTitles(
+        country: Country!
+        filter: TitleFilter
+        first: Int! = 70
+        sortBy: PopularTitlesSorting! = POPULAR
+        sortRandomSeed: Int! = 0
+        offset: Int = 0
+        after: String
+    ): PopularTitlesConnection!
+    packages(country: Country!, platform: Platform!): [Package!]!
+    newTitleBuckets(
+        country: Country!
+        filter: TitleFilter
+        after: String
+        first: Int! = 2
+        bucketSize: Int! = 8
+        priceDrops: Boolean!
+        pageType: NewPageType!
+        groupBy: NewTitleAggregation!
+    ): NewTitleBucketsConnection!
+    newTitles(
+        country: Country!
+        date: Date!
+        filter: TitleFilter
+        after: String
+        first: Int! = 10
+        profile: PosterProfile
+        format: ImageFormat
+        backdropProfile: BackdropProfile
+        priceDrops: Boolean!
+        bucketType: NewDateRangeBucket
+        pageType: NewPageType!
+        showDateBadge: Boolean!
+        availableToPackages: [String!]
+        allowSponsoredRecommendations: SponsoredRecommendationsInput
+    ): NewTitlesConnection!
+    node(id: ID!): MovieOrShowOrSeasonOrEpisode
+}
+
+# Enums
+enum Platform {
+    WEB
+}
+
+enum PopularTitlesSorting {
+    POPULAR
+    TRENDING
+}
+
+enum CreditRole {
+    DIRECTOR
+}
+
+enum Country {
+    NL
+    US
+    DE
+    BR
+    AU
+    NZ
+    CA
+    GB
+    ZA
+    IE
+    NE
+    ME
+    MG
+    KW
+    MZ
+    KE
+    UG
+    TT
+    TC
+    ZM
+    SN
+    JM
+    MD
+    LI
+    MC
+    SM
+    GI
+    TN
+    LY
+    OM
+    BM
+    YE
+    BS
+    GF
+    BA
+    VA
+    XK
+    QA
+    BY
+    BZ
+    CY
+    CM
+    GY
+    ML
+    NI
+    CD
+    MW
+    TZ
+    PG
+    # more
+}
+
+enum Language {
+    en
+    de
+    es
+    fr
+    hr
+    it
+    ja
+    nl
+    ru
+    cy
+    pt
+    ar
+    bs
+    el
+    sw
+    sq
+    be
+    ro
+    # more
+}
+
+enum ObjectType {
+    SHOW
+    MOVIE
+    SEASON
+    GENERIC_TITLE_LIST
+    SHOW_SEASON
+    EPISODE
+    SHOW_EPISODE
+}
+
+enum MonetizationType {
+    FREE
+    FLATRATE
+    ADS
+    BUY
+    RENT
+    FLATRATE_AND_BUY
+    CINEMA
+    FAST
+}
+
+enum PresentationType {
+    SD
+    HD
+    # 4K
+    # Add other presentation types if observed
+}
+
+enum ClipProvider {
+    DAILYMOTION
+}
+
+enum Trend {
+    UP
+    DOWN
+    # Add other possible trends if observed, e.g., "SAME"
+}
+
+enum ImageFormat {
+    JPG
+    PNG
+    WEBP
+    # Add other specific formats if known, e.g., "GIF", "AVIF"
+}
+
+enum PosterProfile {
+    S160
+    S100
+    # Add other specific profiles if known, e.g., "s300", "s500", "original"
+}
+
+enum BackdropProfile {
+    S160
+    S1440
+    # Add other specific profiles if known, e.g., "s780", "s1280", "original"
+}
+
+enum NewTitleAggregation {
+    DATE_PACKAGE
+    # Add other aggregation types if observed
+}
+
+enum NewPageType {
+    NEW
+    # Add other page types if observed
+}
+
+enum NewDateRangeBucket {
+    TODAY
+    # Add other discovered values here
+}
+
+enum PopularityRankTypes { # New enum for category field
+    WEEKLY_POPULARITY_SAME_CONTENT_TYPE
+    DAILY_POPULARITY_SAME_CONTENT_TYPE
+    # Add other category types as discovered
+}
+
+# Commented out missing enum types
+# enum SponsoredRecommendationAdCreativeType {
+#   # Values to be inferred from usage, e.g., "IMAGE", "VIDEO"
+# }
+
+# enum SponsoredRecommendationExternalTrackerType {
+#   # Values to be inferred from usage, e.g., "IMPRESSION", "CLICK"
+# }
+
+# enum SponsoredRecommendationImageSize {
+#   # Values to be inferred from usage, e.g., "SMALL", "MEDIUM", "LARGE"
+# }
+
+# enum GenericTitleListType {
+#   # Values to be inferred from usage, e.g., "CUSTOM_LIST", "WATCHLIST"
+# }
+
+# enum GenericTitleListVisibility {
+#   # Values to be inferred from usage, e.g., "PUBLIC", "PRIVATE"
+# }
+
+# Input Types
+input TitleFilter {
+    packages: [String!]
+    objectTypes: [ObjectType!]
+    ageCertifications: [String!]
+    excludeGenres: [String!]
+    excludeProductionCountries: [String!]
+    productionCountries: [String!]
+    subgenres: [String!]
+    genres: [String!]
+    excludeIrrelevantTitles: Boolean
+    presentationTypes: [PresentationType!]
+    monetizationTypes: [MonetizationType!]
+    searchQuery: String
+    clipType: String
+    clipTechnicalProvider: String
+}
+
+input WatchNowOfferFilter {
+    packages: [String!]
+    monetizationTypes: [MonetizationType!]
+}
+
+input OfferCountFilter {
+    monetizationTypes: [MonetizationType!]
+}
+
+input OfferFilter {
+    packages: [String!]
+    bestOnly: Boolean
+    preAffiliate: Boolean
+}
+
+input StreamingChartsFilter {
+    category: PopularityRankTypes
+    objectType: ObjectType
+    nextTitles: Int
+    previousTitles: Int
+    packages: [String!] # Added based on new query
+}
+
+input SponsoredRecommendationsInput {
+    pageType: NewPageType!
+    placement: String!
+    language: Language!
+    country: Country!
+    applicationContext: ApplicationContextInput!
+    appId: String!
+    platform: Platform!
+    # Commented out missing enum types
+    # supportedFormats: [SponsoredRecommendationSupportedFormat!]
+    # supportedObjectTypes: [SponsoredRecommendationSupportedObjectType!]
+    alwaysReturnBidID: Boolean!
+    testingModeForceHoldoutGroup: Boolean!
+    testingMode: Boolean!
+}
+
+input ApplicationContextInput {
+    appID: String!
+    platform: String!
+    version: String!
+    build: String!
+    isTestBuild: Boolean!
+}
+
+scalar Date # New scalar type for date argument
+
+
+# Object Types
+type PopularTitlesConnection {
+    edges: [PopularTitlesEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type PopularTitlesEdge {
+    cursor: String!
+    node: Title!
+}
+
+type PageInfo {
+    startCursor: String
+    endCursor: String
+    hasPreviousPage: Boolean!
+    hasNextPage: Boolean!
+}
+
+union Title = Movie | Show | Season
+
+# New union specifically for MovieOrShow
+union MovieOrShow = Movie | Show
+
+interface TitleInterface {
+    id: ID!
+    objectId: Int!
+    objectType: ObjectType!
+    streamingCharts(country: Country!, filter: StreamingChartsFilter): StreamingChartsConnectionMovie
+    content(country: Country!, language: Language!): Content # Returns Content union
+    likelistEntry: ListEntry
+    dislikelistEntry: ListEntry
+    watchlistEntryV2: ListEntry
+    customlistEntries: [ListEntry!]
+    watchNowOffer(country: Country!, platform: Platform!, filter: WatchNowOfferFilter!): Offer
+    offers(country: Country!, platform: Platform!, filter: OfferFilter!): [Offer!]
+    freeOffersCount: Int
+    offerCount(country: Country!, platform: Platform!, filter: OfferCountFilter!): Int
+    maxOfferUpdatedAt(country: Country!, platform: Platform!): String
+    bundles(country: Country!, platform: Platform!): [Bundle!]
+}
+
+type Movie implements TitleInterface {
+    id: ID!
+    objectId: Int!
+    objectType: ObjectType!
+    streamingCharts(country: Country!, filter: StreamingChartsFilter): StreamingChartsConnectionMovie
+    content(country: Country!, language: Language!): MovieContent # Returns MovieContent
+    likelistEntry: ListEntry
+    dislikelistEntry: ListEntry
+    watchlistEntryV2: ListEntry
+    customlistEntries: [ListEntry!]
+    watchNowOffer(country: Country!, platform: Platform!, filter: WatchNowOfferFilter!): Offer
+    offers(country: Country!, platform: Platform!, filter: OfferFilter!): [Offer!]
+    freeOffersCount: Int
+    offerCount(country: Country!, platform: Platform!, filter: OfferCountFilter!): Int
+    seenlistEntry: ListEntry
+    maxOfferUpdatedAt(country: Country!, platform: Platform!): String
+    bundles(country: Country!, platform: Platform!): [Bundle!]
+}
+
+type Show implements TitleInterface {
+    id: ID!
+    objectId: Int!
+    objectType: ObjectType!
+    streamingCharts(country: Country!, filter: StreamingChartsFilter): StreamingChartsConnectionMovie
+    content(country: Country!, language: Language!): ShowContent # Returns ShowContent
+    likelistEntry: ListEntry
+    dislikelistEntry: ListEntry
+    watchlistEntryV2: ListEntry
+    customlistEntries: [ListEntry!]
+    watchNowOffer(country: Country!, platform: Platform!, filter: WatchNowOfferFilter!): Offer
+    offers(country: Country!, platform: Platform!, filter: OfferFilter!): [Offer!]
+    freeOffersCount: Int
+    offerCount(country: Country!, platform: Platform!, filter: OfferCountFilter!): Int
+    tvShowTrackingEntry: ListEntry
+    seenState(country: Country!): SeenState
+    maxOfferUpdatedAt(country: Country!, platform: Platform!): String
+    bundles(country: Country!, platform: Platform!): [Bundle!]
+}
+
+type Season implements TitleInterface {
+    id: ID!
+    objectId: Int!
+    objectType: ObjectType!
+    streamingCharts(country: Country!, filter: StreamingChartsFilter): StreamingChartsConnectionMovie
+    content(country: Country!, language: Language!): SeasonContent # Returns SeasonContent
+    likelistEntry: ListEntry
+    dislikelistEntry: ListEntry
+    watchlistEntryV2: ListEntry
+    customlistEntries: [ListEntry!]
+    watchNowOffer(country: Country!, platform: Platform!, filter: WatchNowOfferFilter!): Offer
+    offers(country: Country!, platform: Platform!, filter: OfferFilter!): [Offer!]
+    freeOffersCount: Int
+    offerCount(country: Country!, platform: Platform!, filter: OfferCountFilter!): Int
+    maxOfferUpdatedAt(country: Country!, platform: Platform!): String
+    bundles(country: Country!, platform: Platform!): [Bundle!]
+    episodes(limit: Int, offset: Int): [Episode!]
+}
+
+type Episode implements TitleInterface {
+    id: ID!
+    objectId: Int!
+    objectType: ObjectType!
+    streamingCharts(country: Country!, filter: StreamingChartsFilter): StreamingChartsConnectionMovie
+    content(country: Country!, language: Language!): EpisodeContent
+    likelistEntry: ListEntry
+    dislikelistEntry: ListEntry
+    watchlistEntryV2: ListEntry
+    customlistEntries: [ListEntry!]
+    watchNowOffer(country: Country!, platform: Platform!, filter: WatchNowOfferFilter!): Offer
+    offers(country: Country!, platform: Platform!, filter: OfferFilter!): [Offer!]
+    freeOffersCount: Int
+    offerCount(country: Country!, platform: Platform!, filter: OfferCountFilter!): Int
+    maxOfferUpdatedAt(country: Country!, platform: Platform!): String
+    bundles(country: Country!, platform: Platform!): [Bundle!]
+    seenlistEntry: ListEntry
+    uniqueOfferCount(country: Country!, platform: Platform!, filter: OfferFilter): Int
+    flatrate: [Offer!]
+    buy: [Offer!]
+    rent: [Offer!]
+    free: [Offer!]
+    fast: [Offer!]
+}
+
+
+# Represents a connection of streaming charts (top-level)
+type StreamingChartsConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [StreamingChartsTitlesEdge!]!
+}
+
+# An edge in the top-level streaming charts connection
+type StreamingChartsTitlesEdge {
+    streamingChartInfo: StreamingChartInfo!
+    node: Movie! # Assuming 'node' will always be a Movie in this context for this connection
+}
+
+type StreamingChartsConnectionMovie {
+    edges: [StreamingChartsTitlesEdgeMovie!]!
+}
+
+# An edge in the nested streaming charts connection for a Movie/Show/Season
+type StreamingChartsTitlesEdgeMovie {
+    streamingChartInfo: StreamingChartInfo!
+}
+
+# Information about a specific streaming chart entry
+type StreamingChartInfo {
+    rank: Int!
+    trend: Trend!
+    trendDifference: Int!
+    daysInTop10: Int
+    topRank: Int
+}
+
+# Content union now explicitly lists different content types
+union Content = MovieContent | ShowContent | SeasonContent | EpisodeContent
+
+interface ContentInterface {
+    title: String!
+    fullPath: String!
+    scoring: Scoring
+    posterUrl(profile: PosterProfile, format: ImageFormat): String
+    isReleased: Boolean
+    credits(role: CreditRole!): [Credit!]
+    runtime: Int
+    originalReleaseYear: Int
+    genres: [Genre!]
+    interactions: Interactions
+    clips(providers: [ClipProvider!]): [Clip!]
+    dailymotionClips: [Clip!]
+    externalIds: ExternalIds
+}
+
+type MovieContent implements ContentInterface {
+    title: String!
+    fullPath: String!
+    scoring: Scoring
+    posterUrl(profile: PosterProfile, format: ImageFormat): String
+    backdrops(profile: BackdropProfile, format: ImageFormat): [Backdrop!]
+    isReleased: Boolean
+    credits(role: CreditRole!): [Credit!]
+    runtime: Int
+    originalReleaseYear: Int
+    genres: [Genre!]
+    interactions: Interactions
+    clips(providers: [ClipProvider!]): [Clip!]
+    dailymotionClips: [Clip!]
+    externalIds: ExternalIds
+    shortDescription: String
+}
+
+type ShowContent implements ContentInterface {
+    title: String!
+    fullPath: String!
+    scoring: Scoring
+    posterUrl(profile: PosterProfile, format: ImageFormat): String
+    backdrops(profile: BackdropProfile, format: ImageFormat): [Backdrop!]
+    isReleased: Boolean
+    credits(role: CreditRole!): [Credit!]
+    runtime: Int
+    originalReleaseYear: Int
+    genres: [Genre!]
+    interactions: Interactions
+    clips(providers: [ClipProvider!]): [Clip!]
+    dailymotionClips: [Clip!]
+    externalIds: ExternalIds
+    shortDescription: String
+}
+
+type SeasonContent implements ContentInterface {
+    title: String!
+    fullPath: String!
+    scoring: Scoring
+    posterUrl(profile: PosterProfile, format: ImageFormat): String
+    backdrops(profile: BackdropProfile, format: ImageFormat): [Backdrop!]
+    isReleased: Boolean
+    credits(role: CreditRole!): [Credit!]
+    runtime: Int
+    originalReleaseYear: Int
+    genres: [Genre!]
+    interactions: Interactions
+    clips(providers: [ClipProvider!]): [Clip!]
+    dailymotionClips: [Clip!]
+    externalIds: ExternalIds
+    seasonNumber: Int
+    shortDescription: String
+}
+
+type EpisodeContent implements ContentInterface {
+    title: String!
+    fullPath: String!
+    scoring: Scoring
+    posterUrl(profile: PosterProfile, format: ImageFormat): String
+    # backdrops: [Backdrop!] # Not seen in EpisodeContent response
+    isReleased: Boolean
+    credits(role: CreditRole!): [Credit!]
+    runtime: Int
+    originalReleaseYear: Int
+    genres: [Genre!]
+    interactions: Interactions
+    clips(providers: [ClipProvider!]): [Clip!]
+    dailymotionClips: [Clip!]
+    externalIds: ExternalIds
+    shortDescription: String
+    episodeNumber: Int
+    seasonNumber: Int
+    upcomingReleases: [UpcomingRelease!]
+}
+
+type Scoring {
+    imdbVotes: Int
+    imdbScore: Float
+    tmdbPopularity: Float
+    tmdbScore: Float
+    tomatoMeter: Int
+    certifiedFresh: Boolean
+    jwRating: Float
+}
+
+type Interactions {
+    likelistAdditions: Int
+    dislikelistAdditions: Int
+    votesNumber: Int
+}
+
+type Clip {
+    sourceUrl: String!
+    externalId: String!
+    provider: ClipProvider!
+    streamUrl: String!
+}
+
+type ExternalIds {
+    imdbId: String
+    # Likely other external IDs exist like:
+    # tmdbId: String
+    # tvdbId: String
+    # etc.
+}
+
+type Backdrop {
+    backdropUrl: String!
+}
+
+type Credit {
+    name: String!
+    personId: String!
+}
+
+type Genre {
+    translation(language: Language!): String
+    shortName: String!
+}
+
+type ListEntry {
+    createdAt: String!
+}
+
+type SeenState {
+    seenEpisodeCount: Int
+    progress: Float
+
+}
+
+type Offer {
+    id: ID!
+    presentationType: PresentationType!
+    monetizationType: MonetizationType!
+    newElementCount: Int
+    retailPrice(language: Language!): String
+    retailPriceValue: Float
+    currency: String
+    lastChangeRetailPriceValue: Float
+    type: String
+    country: Country
+    package: Package!
+    standardWebURL: String
+    preAffiliatedStandardWebURL: String
+    streamUrl: String
+    elementCount: Int
+    availableTo: String
+    subtitleLanguages: [String!]
+    videoTechnology: [String!]
+    audioTechnology: [String!]
+    audioLanguages(language: Language!): [String!]
+    lastChangeRetailPrice(language: Language!): String
+    lastChangePercent: Float
+}
+
+type Package {
+    id: ID!
+    icon(profile: PosterProfile): String
+    packageId: Int!
+    clearName: String!
+    shortName: String!
+    technicalName: String!
+    iconWide(profile: PosterProfile): String
+    hasRectangularIcon(country: Country!, platform: Platform!): Boolean
+    planOffers(country: Country!, platform: Platform!): [PackagePlanOffer!]
+}
+
+# New types for New Title Buckets
+type NewTitleBucketsConnection {
+    pageInfo: PageInfo!
+    edges: [NewTitleBucketsEdge!]!
+}
+
+type NewTitleBucketsEdge {
+    key: NewBucketAggregationKey!
+    node: NewTitleBucketNode!
+}
+
+union NewBucketAggregationKey = DatePackageAggregationKey | BucketPackageAggregationKey
+
+type DatePackageAggregationKey {
+    date: String! # Assuming date is a String (e.g., "2025-05-22")
+    package: Package!
+}
+
+type BucketPackageAggregationKey {
+    bucketType: String! # Assuming bucketType is a String
+    package: Package!
+}
+
+type NewTitleBucketNode {
+    totalCount: Int!
+    pageInfo: PageInfo!
+}
+
+# New types for New Titles
+type NewTitlesConnection {
+    totalCount: Int!
+    edges: [NewTitlesEdge!]!
+    sponsoredAd: SponsoredAd
+    pageInfo: PageInfo!
+}
+
+type NewTitlesEdge {
+    cursor: String
+    newOffer(platform: Platform!): Offer
+    node: NewTitleNode!
+}
+
+union NewTitleNode = Movie | Season | GenericTitleList
+
+union MovieOrSeason = Movie | Season
+
+union MovieOrShowOrSeason = Movie | Show | Season
+
+union MovieOrShowOrSeasonOrEpisode = Movie | Show | Season | Episode
+
+union MovieOrShowOrSeasonContent = MovieContent | ShowContent | SeasonContent # New union type
+
+
+type UpcomingRelease {
+    releaseDate: String!
+    package: Package!
+    releaseCountDown(country: Country!): String
+    label: String
+}
+
+type AvailableToInfo {
+    availableCountDown(country: Country!): String
+    package: Package!
+    availableToDate: String!
+}
+
+type GenericTitleList {
+    followedlistEntry: ListEntry
+    id: ID!
+    # Removed 'type' field as GenericTitleListType is commented out
+    content(country: Country!, language: Language!): GenericTitleListContent!
+    titles(country: Country!, first: Int!): GenericTitleListTitlesConnection!
+}
+
+type GenericTitleListContent {
+    name: String!
+    # Removed 'visibility' field as GenericTitleListVisibility is commented out
+}
+
+type GenericTitleListTitlesConnection {
+    totalCount: Int!
+    edges: [GenericTitleListTitlesEdge!]!
+}
+
+type GenericTitleListTitlesEdge {
+    cursor: String
+    node: GenericTitleListNode! # nodeV2 alias
+}
+
+union GenericTitleListNode = Movie | Show | Season
+
+
+type SponsoredAd {
+    bidId: String
+    holdoutGroup: Boolean
+    campaign: SponsoredCampaign!
+    nodeOverrides: [SponsoredNodeOverride!]
+    node: MovieOrShowOrSeason
+}
+
+type SponsoredCampaign {
+    name: String
+    backgroundImages: [SponsoredBackgroundImage!]
+    countdownTimer: Int
+    # creativeType: SponsoredRecommendationAdCreativeType # Commented out
+    disclaimerText: String
+    externalTrackers: [SponsoredExternalTracker!]
+    hideDetailPageButton: Boolean
+    hideImdbScore: Boolean
+    hideJwScore: Boolean
+    hideRatings: Boolean
+    hideContent: Boolean
+    posterOverride: String
+    playSRVideoAsGif: Boolean
+    promotionalImageUrl: String
+    promotionalVideo: PromotionalVideo
+    promotionalTitle: String
+    promotionalText: String
+    promotionalProviderLogo: String
+    promotionalProviderWideLogo: String
+    watchNowLabel: String
+    watchNowOffer: Offer
+    nodeOverrides: [SponsoredNodeOverride!]
+    node: MovieOrShowOrSeason
+}
+
+type SponsoredBackgroundImage {
+    imageURL: String
+    # size: SponsoredRecommendationImageSize # Commented out
+}
+
+type SponsoredExternalTracker {
+    # type: SponsoredRecommendationExternalTrackerType # Commented out
+    data: String
+}
+
+# Commented out the enum definitions themselves
+# enum SponsoredRecommendationSupportedFormat {
+#   IMAGE
+# # VIDEO
+# }
+
+# enum SponsoredRecommendationSupportedObjectType {
+#   MOVIE
+#   SHOW
+#   GENERIC_TITLE_LIST
+#   SHOW_SEASON
+# }
+
+# enum SponsoredRecommendationAdCreativeType {
+#   # Values to be inferred from usage, e.g., "IMAGE", "VIDEO"
+# }
+
+# enum SponsoredRecommendationExternalTrackerType {
+#   # Values to be inferred from usage, e.g., "IMPRESSION", "CLICK"
+# }
+
+# enum SponsoredRecommendationImageSize {
+#   # Values to be inferred from usage, e.g., "SMALL", "MEDIUM", "LARGE"
+# }
+
+# enum GenericTitleListType {
+#   # Values to be inferred from usage, e.g., "CUSTOM_LIST", "WATCHLIST"
+# }
+
+# enum GenericTitleListVisibility {
+#   # Values to be inferred from usage, e.g., "PUBLIC", "PRIVATE"
+# }
+
+
+type PromotionalVideo {
+    url: String
+}
+
+type SponsoredNodeOverride {
+    nodeId: ID!
+    promotionalImageUrl: String
+    watchNowOffer: SponsoredNodeOverrideOffer
+}
+
+type SponsoredNodeOverrideOffer {
+    standardWebURL: String
+}
+
+type Bundle {
+    id: ID!
+    clearName: String!
+    icon(profile: PosterProfile): String
+    technicalName: String!
+    bundleId: String!
+    packages(country: Country!, platform: Platform!): [Package!]!
+    promotionUrl: String
+    offer: Offer
+}
+
+type PackagePlanOffer {
+    title: String!
+    retailPrice(language: Language!): String
+    isTrial: Boolean!
+    durationDays: Int
+    retailPriceValue: Float
+    children: [PackagePlanOffer!]
+}
