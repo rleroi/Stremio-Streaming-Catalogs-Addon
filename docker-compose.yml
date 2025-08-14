@@ -1,6 +1,8 @@
 services:
   stremio-addon:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.local
     ports:
       - "7700:7700"
     environment:
