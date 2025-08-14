@@ -25,6 +25,7 @@ README.md
 Thumbs.db
 
 Dockerfile
+Dockerfile.local
 .dockerignore
 docker-compose.yml
 
@@ -33,3 +34,5 @@ docs/
 
 coverage/
 .nyc_output
+
+cache/
