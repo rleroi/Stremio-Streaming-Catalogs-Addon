@@ -9,6 +9,69 @@ import addon from './addon.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Cache configuration
+const CACHE_DIR = path.join(__dirname, 'cache');
+const CACHE_FILE = path.join(CACHE_DIR, 'catalog-cache.json');
+const REFRESH_INTERVAL = process.env.REFRESH_INTERVAL || 21600000; // 6 hours in milliseconds
+
+// Ensure cache directory exists
+if (!fs.existsSync(CACHE_DIR)) {
+    fs.mkdirSync(CACHE_DIR, { recursive: true });
+}
+
+// Cache functions
+function loadCache() {
+    try {
+        if (fs.existsSync(CACHE_FILE)) {
+            const cacheData = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+            const now = Date.now();
+            
+            // Check if cache is still valid
+            if (cacheData.timestamp && (now - cacheData.timestamp) < REFRESH_INTERVAL) {
+                console.log('Loading catalog data from cache...');
+                return {
+                    movies: cacheData.movies || {},
+                    series: cacheData.series || {}
+                };
+            } else {
+                console.log('Cache expired, will fetch fresh data...');
+            }
+        }
+    } catch (error) {
+        console.log('Error loading cache:', error.message);
+    }
+    return null;
+}
+
+function saveCache(movies, series) {
+    try {
+        const cacheData = {
+            timestamp: Date.now(),
+            movies,
+            series
+        };
+        fs.writeFileSync(CACHE_FILE, JSON.stringify(cacheData, null, 2));
+        console.log('Catalog data cached successfully');
+    } catch (error) {
+        console.log('Error saving cache:', error.message);
+    }
+}
+
+function clearCache() {
+    try {
+        if (fs.existsSync(CACHE_FILE)) {
+            fs.unlinkSync(CACHE_FILE);
+            console.log('Cache cleared successfully');
+        }
+    } catch (error) {
+        console.log('Error clearing cache:', error.message);
+    }
+}
+
+// Environment variable to control cache behavior
+const USE_CACHE = process.env.USE_CACHE !== 'false'; // Default to true
+const FORCE_REFRESH = process.env.FORCE_REFRESH === 'true'; // Default to false
+
 if (process.env.NODE_ENV === 'production') {
     const errorLog = fs.createWriteStream(path.join(__dirname, 'vue', 'dist', 'error.log'));
     process.stderr.write = errorLog.write.bind(errorLog);
@@ -40,7 +103,7 @@ let movies = {
     'hlu': [],
     'pcp': [],
     'cru': [],
-    'hst': [],
+    'jhs': [],
     'zee': [],
     'vil': [],
     'clv': [],
@@ -65,7 +128,7 @@ let series = {
     'hlu': [],
     'pcp': [],
     'cru': [],
-    'hst': [],
+    'jhs': [],
     'zee': [],
     'vil': [],
     'clv': [],
@@ -81,6 +144,25 @@ let series = {
 };
 async function loadNewCatalog() {
     console.log('loadNewCatalog');
+    
+    // Clear cache if force refresh is enabled
+    if (FORCE_REFRESH) {
+        clearCache();
+    }
+    
+    // Try to load from cache first (if caching is enabled)
+    if (USE_CACHE) {
+        const cachedData = loadCache();
+        if (cachedData) {
+            Object.assign(movies, cachedData.movies);
+            Object.assign(series, cachedData.series);
+            console.log('Catalog data loaded from cache');
+            return;
+        }
+    }
+    
+    // If no cache or expired, fetch fresh data
+    console.log('Fetching fresh catalog data...');
     movies.nfx = await addon.getMetas('MOVIE', ['nfx'], 'GB');
     movies.nfk = await addon.getMetas('MOVIE', ['nfk'], 'US');
     movies.dnp = await addon.getMetas('MOVIE', ['dnp'], 'GB');
@@ -95,7 +177,7 @@ async function loadNewCatalog() {
     movies.cts = await addon.getMetas('MOVIE', ['cts'], 'US');
     movies.mgl = await addon.getMetas('MOVIE', ['mgl'], 'US');
     movies.cru = await addon.getMetas('MOVIE', ['cru'], 'US');
-    movies.hst = await addon.getMetas('MOVIE', ['hst'], 'IN', 'in');
+    movies.jhs = await addon.getMetas('MOVIE', ['jhs'], 'IN', 'in');
     movies.zee = await addon.getMetas('MOVIE', ['zee'], 'IN', 'in');
     movies.vil = await addon.getMetas('MOVIE', ['vil'], 'NL', 'nl');
     movies.nlz = await addon.getMetas('MOVIE', ['nlz'], 'NL', 'nl');
@@ -119,7 +201,7 @@ async function loadNewCatalog() {
     series.cru = await addon.getMetas('SHOW', ['cru'], 'US');
     series.cts = await addon.getMetas('SHOW', ['cts'], 'US');
     series.mgl = await addon.getMetas('SHOW', ['mgl'], 'US');
-    series.hst = await addon.getMetas('SHOW', ['hst'], 'IN', 'in');
+    series.jhs = await addon.getMetas('SHOW', ['jhs'], 'IN', 'in');
     series.zee = await addon.getMetas('SHOW', ['zee'], 'IN', 'in');
     series.vil = await addon.getMetas('SHOW', ['vil'], 'NL', 'nl');
     series.nlz = await addon.getMetas('SHOW', ['nlz'], 'NL', 'nl');
@@ -128,6 +210,11 @@ async function loadNewCatalog() {
     series.gop = await addon.getMetas('SHOW', ['gop'], 'BR', 'br');
     series.cpd = await addon.getMetas('SHOW', ['cpd'], 'FR', 'fr');
     series.stz = await addon.getMetas('SHOW', ['stz'], 'US');
+    
+    // Save to cache (if caching is enabled)
+    if (USE_CACHE) {
+        saveCache(movies, series);
+    }
     console.log('done');
 }
 
@@ -271,16 +358,28 @@ app.get('/:configuration/manifest.json', (req, res) => {
             name: 'Crunchyroll',
         });
     }
-    if (selectedProviders.includes('hst')) {
+    if (selectedProviders.includes('jhs')) {
         catalogs.push({
-            id: 'hst',
+            id: 'jhs',
             type: 'movie',
-            name: 'Hotstar',
+            name: 'JioHotstar',
         });
         catalogs.push({
-            id: 'hst',
+            id: 'jhs',
             type: 'series',
-            name: 'Hotstar',
+            name: 'JioHotstar',
+        });
+    }
+    if (selectedProviders.includes('hst')) {
+        catalogs.push({
+            id: 'jhs',
+            type: 'movie',
+            name: 'JioHotstar',
+        });
+        catalogs.push({
+            id: 'jhs',
+            type: 'series',
+            name: 'JioHotstar',
         });
     }
     if (selectedProviders.includes('zee')) {
@@ -473,9 +572,9 @@ app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
     if (id === 'top') {
         id = 'nfx';
     }
-    // mistakenly added peacock free instead of premium. remove pct when/if everyone is using pcp
-    if (id === 'pct') {
-        id = 'pcp';
+    // Jio and Hotstar merged - fallback hst to jhs
+    if (id === 'hst') {
+        id = 'jhs';
     }
 
     if (req.params.type === 'movie') {
@@ -490,6 +589,14 @@ app.get('/:configuration?/catalog/:type/:id/:extra?.json', (req, res) => {
         return;
     }
 })
+
+// Development endpoint to clear cache
+if (process.env.NODE_ENV !== 'production') {
+    app.get('/clear-cache', function (req, res) {
+        clearCache();
+        res.json({ message: 'Cache cleared successfully' });
+    });
+}
 
 app.get('/manifest.json', function (req, res) {
     res.setHeader('Cache-Control', 'max-age=86400,stale-while-revalidate=86400,stale-if-error=86400,public');
@@ -566,7 +673,7 @@ app.get(/.*/, (req, res) => {
 });
 
 loadNewCatalog();
-setInterval(loadNewCatalog, process.env.REFRESH_INTERVAL || 21600000);
+setInterval(loadNewCatalog, REFRESH_INTERVAL);
 
 const port = process.env.PORT || 7700;
 app.listen(port, () => {

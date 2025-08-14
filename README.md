@@ -98,6 +98,25 @@ A Stremio addon that provides streaming catalogs from various popular streaming 
 
 ### Accessing the Application
 
+### Caching System
+
+The addon includes a caching system to improve performance and reduce API calls:
+
+- **Cache Location**: `./cache/catalog-cache.json`
+- **Cache Duration**: 6 hours (configurable)
+- **Environment Variables**:
+  - `USE_CACHE=true/false` - Enable/disable caching (default: true)
+  - `FORCE_REFRESH=true/false` - Force refresh and ignore cache (default: false)
+
+**Development Commands**:
+- Clear cache: `curl http://localhost:7700/clear-cache` (development only)
+- Force refresh: `FORCE_REFRESH=true npm run dev`
+
+**Benefits**:
+- Faster startup times during development
+- Reduced API rate limiting
+- Consistent data for testing
+
 - **Backend API**: http://localhost:7700
 - **Frontend (dev)**: http://localhost:5173 (when running `npm run dev` in vue folder)
 - **Production**: http://localhost:7700 (serves the built frontend)

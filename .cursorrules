@@ -132,7 +132,7 @@ This is a Stremio addon that provides streaming catalogs from 20+ streaming serv
 ### Current Provider Distribution
 - **United States**: Netflix, Disney+, Prime, Apple TV+, HBO Max, Paramount+, Peacock, Hulu, Crunchyroll, Curiosity Stream, MagellanTV, Discovery+
 - **Brazil**: Netflix, Disney+, Prime, Apple TV+, HBO Max, Paramount+, Crunchyroll, Clarovideo, Globoplay, MagellanTV, Curiosity Stream
-- **India**: Netflix, Disney+, Prime, Apple TV+, Crunchyroll, Zee5, Hotstar, MagellanTV, Curiosity Stream, Discovery+
+- **India**: Netflix, Disney+, Prime, Apple TV+, Crunchyroll, Zee5, JioHotstar, MagellanTV, Curiosity Stream, Discovery+
 - **Turkey**: Netflix, Disney+, Prime, Apple TV+, Crunchyroll, BluTV, MagellanTV, Curiosity Stream
 - **Netherlands**: Netflix, Disney+, Prime, Apple TV+, HBO Max, Crunchyroll, Hayu, Videoland, SkyShowtime, MagellanTV, Curiosity Stream, NLZIET, Discovery+
 - **France**: Netflix, Disney+, Prime, Apple TV+, HBO Max, Hayu, Canal+
@@ -151,7 +151,7 @@ This is a Stremio addon that provides streaming catalogs from 20+ streaming serv
 - cru: Crunchyroll
 - cts: Curiosity Stream
 - mgl: MagellanTV
-- hst: Hotstar
+- jhs: JioHotstar
 - zee: Zee5
 - vil: Videoland
 - blv: BluTV

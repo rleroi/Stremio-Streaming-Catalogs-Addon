@@ -101,9 +101,9 @@
                                         <img src="/globo.webp" @click="toggle('gop')" class="rounded-xl"
                                             :class="!isActive('gop') ? 'inactive' : ''" role="button" />
                                     </Popper>
-                                    <Popper v-show="showProvider('hst')" hover content="Hotstar">
-                                        <img src="/hotstar.webp" @click="toggle('hst')" class="rounded-xl"
-                                            :class="!isActive('hst') ? 'inactive' : ''" role="button" />
+                                    <Popper v-show="showProvider('jhs')" hover content="JioHotstar">
+                                        <img src="/jiohotstar.webp" @click="toggle('jhs')" class="rounded-xl"
+                                            :class="!isActive('jhs') ? 'inactive' : ''" role="button" />
                                     </Popper>
                                     <Popper v-show="showProvider('zee')" hover content="Zee5">
                                         <img src="/zee5.webp" @click="toggle('zee')" class="rounded-xl"
@@ -233,7 +233,7 @@ const regions = {
         'amp',
         'cru',
         'zee',
-        'hst',
+        'jhs',
         'mgl',
         'cts',
         'dpe',
@@ -287,7 +287,7 @@ const regions = {
         'clv',
         'gop',
         'zee',
-        'hst',
+        'jhs',
         'hay',
         'vil',
         'sst',

@@ -14,12 +14,11 @@ COPY . .
 
 RUN cd vue && npm run build
 
-EXPOSE 7700
+EXPOSE ${PORT:-7700}
 
 ENV NODE_ENV=production
-ENV PORT=7700
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:7700/manifest.json || exit 1
+  CMD curl -f http://localhost:${PORT:-7700}/manifest.json || exit 1
 
 CMD ["npm", "start"]
