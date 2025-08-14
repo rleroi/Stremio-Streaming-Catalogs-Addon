@@ -144,6 +144,26 @@
                                 <div>
                                     <v-button type="submit" variation="primary">Install addon</v-button>
                                 </div>
+
+                                <div v-if="state.addonUrl" class="mt-4">
+                                    <p class="text-gray-500 mb-2 text-sm">Manual install URL:</p>
+                                    <div class="flex">
+                                        <v-input 
+                                            type="text" 
+                                            class="rounded-r-none h-[46px] text-sm" 
+                                            :value="state.addonUrl" 
+                                            readonly 
+                                        />
+                                        <v-button 
+                                            type="button" 
+                                            class="w-auto rounded-l-none border-l-0 h-[46px]" 
+                                            @click="copyUrl"
+                                        >
+                                            Copy
+                                        </v-button>
+                                    </div>
+                                    <p class="text-gray-600 text-xs mt-1">If the automatic install doesn't work, copy this URL and paste it in Stremio's addon installation</p>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -381,6 +401,15 @@ function toggle(provider) {
 
 function isActive(provider) {
     return state.providers.includes(provider)
+}
+
+function copyUrl() {
+    navigator.clipboard.writeText(state.addonUrl).then(() => {
+        alert('URL copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy URL:', err);
+        alert('Failed to copy URL. Please copy manually.');
+    });
 }
 </script>
 
