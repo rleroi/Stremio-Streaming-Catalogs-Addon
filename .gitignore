@@ -3,10 +3,6 @@ node_modules
 vue/dist/error.log
 .idea
 
-# Build outputs
-vue/dist/
-dist/
-
 # Environment files
 .env.local
 .env.production
