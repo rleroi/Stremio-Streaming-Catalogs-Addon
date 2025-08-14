@@ -6,8 +6,6 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=7700
-    volumes:
-      - ./cache:/app/cache
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7700/manifest.json"]
@@ -27,7 +25,6 @@ services:
       - .:/app
       - /app/node_modules
       - /app/vue/node_modules
-      - ./cache:/app/cache
     command: npm run dev
     profiles:
       - dev

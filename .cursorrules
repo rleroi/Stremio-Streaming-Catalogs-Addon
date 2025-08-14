@@ -29,20 +29,7 @@ This is a Stremio addon that provides streaming catalogs from 20+ streaming serv
 - **Server crashes on startup**: Usually due to external API rate limits or network issues in `loadNewCatalog()`
 - **Frontend not loading**: Check `VITE_APP_URL` in .env files points to correct backend URL
 - **Build issues**: Ensure `vue/dist/` exists (run `npm run build` in vue directory)
-- **Rate limiting (429 errors)**: Use local JSON cache system to avoid repeated API calls during development
-
-## Caching System
-- **Cache Location**: `./cache/` directory (auto-created)
-- **Cache Duration**: 6 hours (configurable via `CACHE_DURATION`)
-- **Cache Files**: Named by type, providers, country, language (e.g., `MOVIE_nfx_GB_en.json`)
-- **Cache Benefits**: 
-  - Prevents rate limiting during development
-  - Faster startup times
-  - Reduces API calls
-- **Cache Management**: 
-  - Auto-clears after 6 hours
-  - Manual clear: `addon.clearCache()`
-  - Excluded from git (in .gitignore)
+- **Rate limiting (429 errors)**: May occur during development when making many API calls
 
 ## API Endpoints
 - `/manifest.json` - Stremio addon manifest

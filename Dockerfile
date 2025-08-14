@@ -14,8 +14,6 @@ COPY . .
 
 RUN cd vue && npm run build
 
-RUN mkdir -p cache
-
 EXPOSE 7700
 
 ENV NODE_ENV=production

@@ -1,72 +1,12 @@
 import axios from 'axios';
-import fs from 'fs';
-import path from 'path';
 
 const AMOUNT = 100;
 const AMOUNT_TO_VERIFY = 24;
 const DUPES_CACHE = {};
 const DELETED_CACHE = [];
 
-// Cache configuration
-const CACHE_DIR = './cache';
-const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
-
-// Ensure cache directory exists
-if (!fs.existsSync(CACHE_DIR)) {
-    fs.mkdirSync(CACHE_DIR, { recursive: true });
-}
-
-function getCacheKey(type, providers, country, language) {
-    return `${type}_${providers.join('_')}_${country}_${language}.json`;
-}
-
-function getCachePath(cacheKey) {
-    return path.join(CACHE_DIR, cacheKey);
-}
-
-function isCacheValid(cachePath) {
-    try {
-        const stats = fs.statSync(cachePath);
-        const now = Date.now();
-        return (now - stats.mtime.getTime()) < CACHE_DURATION;
-    } catch (error) {
-        return false;
-    }
-}
-
-function loadFromCache(cachePath) {
-    try {
-        const data = fs.readFileSync(cachePath, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.log('Cache read error:', error.message);
-        return null;
-    }
-}
-
-function saveToCache(cachePath, data) {
-    try {
-        fs.writeFileSync(cachePath, JSON.stringify(data, null, 2));
-        console.log('Cached data saved to:', cachePath);
-    } catch (error) {
-        console.error('Cache write error:', error.message);
-    }
-}
-
-function clearCache() {
-    try {
-        if (fs.existsSync(CACHE_DIR)) {
-            fs.rmSync(CACHE_DIR, { recursive: true, force: true });
-            console.log('Cache cleared');
-        }
-    } catch (error) {
-        console.error('Cache clear error:', error.message);
-    }
-}
-
 export default {
     verify: true,
-    clearCache,
     replaceRpdbPosters(rpdbKey, metas) {
         if (!rpdbKey) {
             return metas;
@@ -80,20 +20,6 @@ export default {
         // todo
     },
     async getMetas(type = 'MOVIE', providers = ['nfx'], country = "GB", language = 'en') {
-        // Check cache first
-        const cacheKey = getCacheKey(type, providers, country, language);
-        const cachePath = getCachePath(cacheKey);
-        
-        if (isCacheValid(cachePath)) {
-            const cachedData = loadFromCache(cachePath);
-            if (cachedData) {
-                console.log(`[CACHE HIT] ${providers.join(',')} ${cachedData.length} items`);
-                return cachedData;
-            }
-        }
-        
-        console.log(`[CACHE MISS] Fetching fresh data for ${providers.join(',')}`);
-        
         let res = null;
         try {
             res = await axios.post('https://apis.justwatch.com/graphql', {
@@ -131,23 +57,12 @@ export default {
         } catch (e) {
             console.error(e.message);
             console.log(e.response?.data);
-            
-            // If we hit rate limits, try to load from cache even if expired
-            if (e.response?.status === 429) {
-                console.log('[RATE LIMITED] Attempting to load from cache...');
-                const cachedData = loadFromCache(cachePath);
-                if (cachedData) {
-                    console.log(`[CACHE FALLBACK] ${providers.join(',')} ${cachedData.length} items`);
-                    return cachedData;
-                }
-            }
-
             return [];
         }
 
         console.log(providers.join(','), res.data.data.popularTitles.edges.length);
 
-        const processedData = (await Promise.all(res.data.data.popularTitles.edges.map(async (item, index) => {
+        return (await Promise.all(res.data.data.popularTitles.edges.map(async (item, index) => {
             let imdbId = item.node.content.externalIds.imdbId;
 
             if (!imdbId || DELETED_CACHE.includes(imdbId)) {
@@ -201,10 +116,5 @@ export default {
                 type: type === 'MOVIE' ? 'movie' : 'series',
             }
         }))).filter(item => item?.id);
-        
-        // Save to cache
-        saveToCache(cachePath, processedData);
-        
-        return processedData;
     }
 }
