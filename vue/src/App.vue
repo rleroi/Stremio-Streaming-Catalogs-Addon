@@ -195,6 +195,10 @@
                       <img src="/acorntv.webp" @click="toggle('act')" class="rounded-xl"
                            :class="!isActive('act') ? 'inactive' : ''" role="button"/>
                     </Popper>
+                    <Popper v-show="showProvider('hmc')" hover content="Hallmark+">
+                      <img src="/hallmark.webp" @click="toggle('hmc')" class="rounded-xl"
+                           :class="!isActive('hmc') ? 'inactive' : ''" role="button"/>
+                    </Popper>
                     <Popper v-show="showProvider('itv')" hover content="ITVX">
                       <img src="/itvx.webp" @click="toggle('itv')" class="rounded-xl"
                            :class="!isActive('itv') ? 'inactive' : ''" role="button"/>
@@ -312,6 +316,7 @@ const regions = {
     'crc',
     'iqi',
     'sha',
+    'hmc',
   ],
   'United Kingdom': [
     'nfx',
@@ -462,6 +467,7 @@ const regions = {
     'crc',
     'iqi',
     'sha',
+    'hmc',
   ],
 };
 

@@ -28,6 +28,7 @@ A Stremio addon that provides streaming catalogs from various popular streaming 
 - Hayu
 - Clarovideo
 - Globoplay
+- Hallmark+
 - And many more...
 
 ## Local Development Setup
