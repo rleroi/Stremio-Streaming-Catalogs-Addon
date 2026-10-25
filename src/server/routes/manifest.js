@@ -43,6 +43,7 @@ function buildProviderCatalogs(selectedProviders) {
     'shd': { name: 'Shudder', types: ['movie', 'series'] },
     'bbo': { name: 'BritBox', types: ['movie', 'series'] },
     'act': { name: 'Acorn TV', types: ['movie', 'series'] },
+    'hmc': { name: 'Hallmark+', types: ['movie', 'series'] },
     'itv': { name: 'ITVX', types: ['movie', 'series'] },
     'bbc': { name: 'BBC iPlayer', types: ['movie', 'series'] },
     'al4': { name: 'Channel 4', types: ['movie', 'series'] },

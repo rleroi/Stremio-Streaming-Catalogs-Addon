@@ -43,7 +43,7 @@ let movies = {
   'hlu': [], 'pcp': [], 'cru': [], 'jhs': [], 'zee': [], 'vil': [], 'clv': [],
   'gop': [], 'mgl': [], 'cts': [], 'sst': [], 'nlz': [], 'stz': [], 'mbi': [],
   'vik': [], 'sgo': [], 'sonyliv': [], 'cpd': [], 'mp9': [], 'shd': [], 'bbo': [],
-  'act': [], 'itv': [], 'bbc': [], 'al4': [], 'crc': [], 'iqi': [], 'sha': [],
+  'act': [], 'itv': [], 'bbc': [], 'al4': [], 'crc': [], 'iqi': [], 'sha': [], 'hmc': [],
 };
 
 let series = {
@@ -51,7 +51,7 @@ let series = {
   'hlu': [], 'pcp': [], 'cru': [], 'jhs': [], 'zee': [], 'vil': [], 'clv': [],
   'gop': [], 'mgl': [], 'cts': [], 'sst': [], 'nlz': [], 'stz': [], 'vik': [],
   'sgo': [], 'sonyliv': [], 'hay': [], 'cpd': [], 'dpe': [], 'mp9': [], 'shd': [],
-  'bbo': [], 'act': [], 'itv': [], 'bbc': [], 'al4': [], 'iqi': [], 'sha': [],
+  'bbo': [], 'act': [], 'itv': [], 'bbc': [], 'al4': [], 'iqi': [], 'sha': [], 'hmc': [],
 };
 
 /**
@@ -110,6 +110,7 @@ async function loadNewCatalog() {
   movies.crc = await justwatch.getMetas('MOVIE', ['crc'], 'US');
   movies.iqi = await justwatch.getMetas('MOVIE', ['iqi'], 'US');
   movies.sha = await justwatch.getMetas('MOVIE', ['sha'], 'US');
+  movies.hmc = await justwatch.getMetas('MOVIE', ['hmc'], 'US');
   movies.itv = await justwatch.getMetas('MOVIE', ['itv'], 'GB');
   movies.bbc = await justwatch.getMetas('MOVIE', ['bbc'], 'GB');
   movies.al4 = await justwatch.getMetas('MOVIE', ['al4'], 'GB');
@@ -146,6 +147,7 @@ async function loadNewCatalog() {
   series.act = await justwatch.getMetas('SHOW', ['act'], 'US');
   series.iqi = await justwatch.getMetas('SHOW', ['iqi'], 'US');
   series.sha = await justwatch.getMetas('SHOW', ['sha'], 'US');
+  series.hmc = await justwatch.getMetas('SHOW', ['hmc'], 'US');
   series.itv = await justwatch.getMetas('SHOW', ['itv'], 'GB');
   series.bbc = await justwatch.getMetas('SHOW', ['bbc'], 'GB');
   series.al4 = await justwatch.getMetas('SHOW', ['al4'], 'GB');
