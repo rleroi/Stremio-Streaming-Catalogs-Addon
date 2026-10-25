@@ -133,3 +133,4 @@ curl -s "http://localhost:7700/catalog/series/mbi.json" | jq '.metas | length'
 - cts: Curiosity Stream, mgl: MagellanTV, jhs: JioHotstar, zee: Zee5
 - hay: Hayu, nlz: NLZIET, sst: SkyShowtime, cpd: Canal+, dpe: Discovery+
 - stz: Starz, mbi: Mubi, vik: Viki, sgo: Sky Go, sonyliv: Sony Liv
+- shd: Shudder, bbo: BritBox, act: Acorn TV, hmc: Hallmark+
